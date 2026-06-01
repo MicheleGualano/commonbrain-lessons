@@ -1,0 +1,16 @@
+{
+  "id": "scrub-git-history-before-public-flip",
+  "date": "2026-06-01",
+  "title": "Scrubbing a secret in the working tree doesn't remove it from git history",
+  "rule": "Making a private repository public exposes the entire commit history, not just the current files. Removing or hashing a sensitive value in the working tree does NOT purge it from past commits — anyone can recover it with git log -p. Before flipping a repo public, scan the full history for secrets and sensitive identifiers; if any are found, rewrite history first (squash to a fresh initial commit, or use git filter-repo) and force-push. Treat the flip as irreversible: forks, archivers, and scrapers can copy anything during the exposure window, so do the history hygiene before, not after.",
+  "tags": ["git", "security", "secrets", "open-source"],
+  "triggers": [
+    "making a private repo public exposes git history",
+    "git log -p still shows a deleted secret",
+    "remove a secret from git history before going public",
+    "squash or filter-repo to purge history before public flip"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
