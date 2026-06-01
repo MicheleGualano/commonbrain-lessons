@@ -1,0 +1,16 @@
+{
+  "id": "skipped-required-check-counts-as-passed",
+  "date": "2026-06-02",
+  "title": "GitHub treats a skipped required status check as satisfied",
+  "rule": "GitHub branch protection treats a skipped required status check as satisfied, not as a failure — so a PR can merge even though that check never actually ran. It bites fan-in jobs ('all checks passed') built with `needs: [...]`: if an upstream job fails, the fan-in job is skipped by default, leaving the required check green by absence. Make such gate jobs fail-closed: add `if: always()` plus a step that fails unless every needed result is success (treat failure, cancelled and skipped as blocking). Then a failing gate reports a real failure and the merge is correctly blocked.",
+  "tags": ["github", "ci-cd", "branch-protection", "security"],
+  "triggers": [
+    "a failing PR merged even though a required check was skipped",
+    "fan-in gate job is skipped when an upstream job fails",
+    "branch protection treats a skipped check as passed",
+    "required status check skipped still allowed the merge"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
