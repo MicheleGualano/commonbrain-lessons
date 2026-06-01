@@ -1,0 +1,16 @@
+{
+  "id": "github-visibility-change-locks-repo",
+  "date": "2026-06-01",
+  "title": "A GitHub visibility change briefly locks the repo against writes",
+  "rule": "Right after you change a GitHub repository's visibility (e.g. private to public), the GitHub API temporarily locks the repo and write calls fail with HTTP 403 'Repository has been locked'. The lock clears on its own within seconds to about a minute. So automation that flips visibility and then immediately configures the repo — branch protection, enabling Pages, pushing — must always retry those writes with a short backoff, and never treat the first 403 as fatal.",
+  "tags": ["github", "automation", "api", "ci-cd"],
+  "triggers": [
+    "Repository has been locked 403 after changing visibility",
+    "branch protection fails right after making repo public",
+    "enable GitHub Pages 403 immediately after visibility change",
+    "retry repo writes with backoff after visibility flip"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
