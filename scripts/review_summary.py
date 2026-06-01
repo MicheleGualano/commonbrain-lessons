@@ -54,8 +54,8 @@ def gh(args, input_text=None):
 
 def changed_lessons():
     out = gh(["api", f"repos/{REPO}/pulls/{PR}/files", "--paginate",
-              "--jq", '.[] | select(.filename|test("^lessons/.*\\.json$")) | '
-                      'select(.status!="removed") | .filename'])
+              "--jq", '.[] | select(.status != "removed") | .filename '
+                      '| select(startswith("lessons/") and endswith(".json"))'])
     return [l.strip() for l in out.splitlines() if l.strip()]
 
 
