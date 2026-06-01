@@ -60,7 +60,8 @@ def changed_lessons():
 
 
 def fetch_lesson(path):
-    raw = gh(["api", f"repos/{REPO}/contents/{path}", "-f", f"ref={HEAD_SHA}", "--jq", ".content"])
+    # ref MUST go in the query string: passing it via -f/-F would flip gh's GET to POST.
+    raw = gh(["api", f"repos/{REPO}/contents/{path}?ref={HEAD_SHA}", "--jq", ".content"])
     if not raw.strip():
         return None
     import base64
