@@ -1,0 +1,2 @@
+This file exists only to prove the path-allowlist CI job rejects a PR that
+touches anything outside lessons/ and html/. It must never be merged.
