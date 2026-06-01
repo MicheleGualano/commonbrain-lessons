@@ -274,8 +274,22 @@ jobs:
           if-no-files-found: ignore
 
   # --- Single REQUIRED check: succeeds only if every gate above passed --------
+  # MUST be fail-closed: with `if: always()` this job runs even when an upstream
+  # gate job fails, and reports FAILURE (red) if any need is not 'success'. Without
+  # this, a failing gate leaves gate-passed *skipped*, and GitHub treats a skipped
+  # required status check as satisfied — so a bad PR could be merged.
   gate-passed:
     runs-on: ubuntu-latest
     needs: [path-allowlist, schema-validate, secret-scan, injection-sanitize, html-scan, generality-lint, generality-scorecard, dedup, build-artifact]
+    if: ${{ always() }}
     steps:
-      - run: echo "All commonbrain gate checks passed."
+      - name: Require every gate job to have succeeded (fail-closed)
+        run: |
+          echo "upstream results: ${{ join(needs.*.result, ', ') }}"
+          if [ "${{ contains(needs.*.result, 'failure') }}" = "true" ] \
+             || [ "${{ contains(needs.*.result, 'cancelled') }}" = "true" ] \
+             || [ "${{ contains(needs.*.result, 'skipped') }}" = "true" ]; then
+            echo "::error::A gate check did not succeed — blocking merge."
+            exit 1
+          fi
+          echo "All commonbrain gate checks passed."
