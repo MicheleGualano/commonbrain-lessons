@@ -1,0 +1,24 @@
+# Entity stop-list for generality_lint.py.
+# Terms here must NOT appear in public lesson content (title / rule / triggers / html).
+#
+# Two line formats are supported:
+#   <term>              plaintext, matched case-insensitively on word boundaries.
+#                       Use ONLY for terms that are themselves safe to publish (this file
+#                       ships in a public repo), e.g. a generic disallowed buzzword.
+#   sha256:<hexdigest>  the SHA-256 of the lowercased term. Use for SENSITIVE entities
+#                       (company / client / person / internal identifier) so the term
+#                       itself never appears in this public file. The linter tokenizes
+#                       lesson text, lowercases each token, and blocks any whose SHA-256
+#                       is listed below. Blocked matches are reported generically (the
+#                       offending token is never echoed) so CI logs don't re-leak it.
+#
+# To add a sensitive term:  printf '%s' "yourterm" | tr 'A-Z' 'a-z' | shasum -a 256
+# '#' starts a comment; one entry per line.
+
+sha256:c8b6c061e8591dfeaabefdbad7cdacc0ece53900f0bb02160860a0e3ef7d2acc
+sha256:075266c3d8b8fde70084d94010a8600648771debf514b457ea1d3ac777f6ee7d
+sha256:7228f138df89d368bce9caed2234b75834ebf56c8645545ad58a9da1e629c451
+sha256:208ad55e4c4200ca42a73ab260efd6df57efccc95aad25fe4d1f378e23a0acb6
+sha256:06e246a90b2fc325e3c7d10d740723a323ece0aa2b850153eb1a9cb4e7ed3a6d
+sha256:b4b0edd2c217cfa6206fb53a463759037da8ef48283160e062b54a1175a6aeee
+sha256:aa97e20891adfe91b3f6a68e6f31d51ec7e7483c7701fdd8c9c4e5aa62f890ad

@@ -1,0 +1,11 @@
+{
+  "id": "home-path-sample",
+  "date": "2026-06-01",
+  "title": "Fixture leaking a personal home path",
+  "rule": "The build script lives at /Users/jane/projects/app/build.sh, which must be generalized away before publishing.",
+  "tags": ["test", "gotcha"],
+  "triggers": ["a path under a user home directory leaked into a lesson"],
+  "provenance": "contributed",
+  "contributor": "tester",
+  "license": "CC-BY-4.0"
+}

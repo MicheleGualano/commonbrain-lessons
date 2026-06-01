@@ -1,0 +1,26 @@
+{
+  "id": "codegen-name-collision-clobber",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/codegen-name-collision-clobber.html",
+  "title": "Codegen output named from spec data can clobber a generator-owned file (last writer wins)",
+  "rule": "When a code generator names a file from user/spec input, that name can collide with one the generator emits from its own machinery; last-writer-wins overwrites one of them and you get 'undefined: <symbol>' for the lost half. Namespace generator-owned outputs with a distinct suffix so user-derived names can never collide, and add a regression test that feeds a spec name matching an internal file.",
+  "tags": [
+    "codegen",
+    "filename-collision",
+    "code-generation",
+    "regression-test",
+    "naming"
+  ],
+  "triggers": [
+    "undefined: <symbol> for a function that the generator should have written",
+    "generated file count is one lower than expected",
+    "a generated file got overwritten by another generated file",
+    "two codegen passes write the same output path",
+    "spec field named the same as an internal generated file (e.g. client, types, doc)",
+    "build fails only when the spec contains a specific resource name"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

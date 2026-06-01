@@ -1,0 +1,24 @@
+{
+  "id": "claude-code-pin-model-settings",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/claude-code-pin-model-settings.html",
+  "title": "Claude Code: the model picked via /model is session-only unless written to settings.json",
+  "rule": "Claude Code preferences (permissions, theme, fastMode, statusLine, hooks) persist because they are keys in settings.json (user-global under ~/.claude) or settings.local.json (per-project); picking the model with /model writes no key, so it resets each launch. Pin it by adding \"model\": \"<model-id>\" to settings.json (effective next restart). For any 'I reset X every restart' complaint, first check whether X is actually a key in those files before assuming the config is broken; if a model-id variant/suffix is rejected at startup, fall back to the base id rather than block on an unverified string.",
+  "tags": [
+    "claude-code",
+    "config",
+    "settings",
+    "model",
+    "persistence"
+  ],
+  "triggers": [
+    "have to re-pick the model with /model every session",
+    "config doesn't persist across Claude Code restarts",
+    "model resets after restart",
+    "why do I have to reset everything every time I restart the terminal"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

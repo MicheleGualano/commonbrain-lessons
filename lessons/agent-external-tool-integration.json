@@ -1,0 +1,27 @@
+{
+  "id": "agent-external-tool-integration",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/agent-external-tool-integration.html",
+  "title": "Wire an external CLI into an agent: CLI-first, fallback, one shared tool-manual, soft prereq hook",
+  "rule": "To make an agent prefer a deterministic CLI over fuzzy retrieval like web search, wire five pieces: (1) CLI-first for what it covers; (2) an explicit fallback when it is absent or out of scope; (3) one shared tool-manual (command table, output envelope, fallback rule) every skill links via a one-line pointer plus its own move, not duplicating the contract per skill; (4) a session-start `command -v` check that warns but never blocks; (5) a confidence tier that upgrades on a successful fetch. A hard binary dependency breaks portability; soft check plus fallback make it degrade gracefully.",
+  "tags": [
+    "agents",
+    "integration",
+    "cli",
+    "plugin",
+    "skills",
+    "fallback"
+  ],
+  "triggers": [
+    "integrate an external CLI into an agent's skills",
+    "make the agent use a CLI instead of web search",
+    "avoid a hard dependency on an external binary in a plugin",
+    "dry way to wire many skills to the same tool",
+    "session-start prereq check soft non-blocking",
+    "graceful fallback when a tool isn't installed"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

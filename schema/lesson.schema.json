@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MicheleGualano/commonbrain-lessons/schema/lesson.schema.json",
+  "title": "commonbrain lesson",
+  "description": "Frozen contract for a single public coding lesson. Mirrors the private second-brain shape (id/date/title/tags/triggers/rule) plus public provenance fields. Length caps + single-line + no-control-char patterns are part of the prompt-injection defense (Pillar 0): they shrink the surface a malicious lesson can use to smuggle instructions into an agent's context.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "date", "title", "rule", "tags", "triggers", "provenance", "license"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable kebab-case slug, unique across the corpus. Also the DB primary key and the lessons/<id>.json filename.",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 80
+    },
+    "date": {
+      "type": "string",
+      "description": "Authoring date, YYYY-MM-DD.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "html_path": {
+      "type": "string",
+      "description": "Optional repo-relative path to the HTML explain layer.",
+      "pattern": "^html/[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9]+(?:-[a-z0-9]+)*\\.html$",
+      "maxLength": 200
+    },
+    "title": {
+      "type": "string",
+      "description": "One-line human title. Single line, no control characters.",
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+      "minLength": 8,
+      "maxLength": 160
+    },
+    "rule": {
+      "type": "string",
+      "description": "One actionable advisory line. NOT a runnable command. Single line, no control characters; capped to limit injection surface.",
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+      "minLength": 12,
+      "maxLength": 600
+    },
+    "tags": {
+      "type": "array",
+      "description": "Canonical topical facets (browse key).",
+      "minItems": 1,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "maxLength": 30
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "description": "LITERAL error strings / concrete symptoms a future agent would grep (recall key). Single line each, no control characters.",
+      "minItems": 1,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+        "minLength": 3,
+        "maxLength": 300
+      }
+    },
+    "provenance": {
+      "type": "string",
+      "description": "promoted = generalized from a private brain by its owner; contributed = external PR.",
+      "enum": ["promoted", "contributed"]
+    },
+    "contributor": {
+      "type": ["string", "null"],
+      "description": "GitHub handle of the PR author; null for seed content.",
+      "maxLength": 100
+    },
+    "license": {
+      "type": "string",
+      "description": "Content license (SPDX-style). Fixed to the repo default.",
+      "const": "CC-BY-4.0"
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "Whether the rule has been reproduced/confirmed. Defaults to false (unverified) until a maintainer checks it.",
+      "default": false
+    }
+  }
+}

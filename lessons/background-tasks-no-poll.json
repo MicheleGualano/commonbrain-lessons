@@ -1,0 +1,23 @@
+{
+  "id": "background-tasks-no-poll",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/background-tasks-no-poll.html",
+  "title": "Background tasks notify on completion — don't poll",
+  "rule": "When the harness re-invokes you on a background task's completion, do not sleep or loop to poll it — react to the completion notification instead. And remember a zero exit or empty output is not proof of success: read the actual output before trusting it.",
+  "tags": [
+    "process",
+    "agents",
+    "harness",
+    "efficiency"
+  ],
+  "triggers": [
+    "tempted to poll a background job the harness already notifies on completion",
+    "should I sleep or loop to check a long background build, or wait for the notification",
+    "a task exited 0 but did not actually do the right thing",
+    "reacting to a background-task completion notification instead of polling"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

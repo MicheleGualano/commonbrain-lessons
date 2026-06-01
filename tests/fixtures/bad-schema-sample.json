@@ -1,0 +1,9 @@
+{
+  "id": "bad-schema-sample",
+  "date": "2026-06-01",
+  "title": "Bad schema fixture",
+  "rule": "too short",
+  "tags": ["test"],
+  "provenance": "contributed",
+  "license": "CC-BY-4.0"
+}

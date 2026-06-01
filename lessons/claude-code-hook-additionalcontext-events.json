@@ -1,0 +1,23 @@
+{
+  "id": "claude-code-hook-additionalcontext-events",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/claude-code-hook-additionalcontext-events.html",
+  "title": "Claude Code: only SessionStart / UserPromptSubmit / PreToolUse can inject additionalContext",
+  "rule": "In Claude Code, only three hook events can push text into the model's context via hookSpecificOutput.additionalContext: SessionStart, UserPromptSubmit, and PreToolUse. PostToolUse cannot (it only supports decision/reason). To make knowledge-base retrieval deterministic instead of relying on the agent remembering to look, use a UserPromptSubmit hook that searches on the prompt and returns additionalContext (low-noise, fires mid-task); PreToolUse works too but fires on every tool call.",
+  "tags": [
+    "claude-code",
+    "hooks",
+    "context-injection",
+    "automation"
+  ],
+  "triggers": [
+    "which Claude Code hook can inject additionalContext",
+    "PostToolUse additionalContext is ignored or not added to context",
+    "how to auto-inject context mid-task into a Claude Code agent",
+    "hookSpecificOutput additionalContext UserPromptSubmit"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

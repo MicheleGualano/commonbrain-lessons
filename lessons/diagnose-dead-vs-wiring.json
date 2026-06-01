@@ -1,0 +1,25 @@
+{
+  "id": "diagnose-dead-vs-wiring",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/diagnose-dead-vs-wiring.html",
+  "title": "When a linter says 'unused', diagnose the cause before deleting",
+  "rule": "'Unused' is a symptom, not a verdict. First map the real call sites across every config/build shape and read the intent signals (a test that pins it, docs or help text promising the behavior, a referenced issue). Three diagnoses, three cures: (a) dead everywhere -> remove it and its orphaned imports; (b) live in another shape -> deleting breaks that shape, so gate the definition on the OR of its real callers; (c) intended but never wired -> complete the wiring, do not delete or suppress. Resolve what investigation can resolve; surface only the genuine product decision to a human.",
+  "tags": [
+    "dead-code",
+    "linter",
+    "debugging",
+    "codegen",
+    "judgment"
+  ],
+  "triggers": [
+    "func X is unused (unused) but X looks intentional or test-pinned",
+    "tempted to delete a function a linter flagged as unused",
+    "a function is unused in one config/shape but maybe used in another",
+    "docs/help-text/issue promise a behavior the code does not wire up",
+    "should I delete, suppress, or gate this unused symbol"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

@@ -1,0 +1,25 @@
+{
+  "id": "macos-tcc-sandbox-file-access",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/macos-tcc-sandbox-file-access.html",
+  "title": "macOS TCC blocks reading Downloads/Desktop/Documents (Operation not permitted) even when an agent sandbox is off",
+  "rule": "On macOS, Downloads, Desktop and Documents are TCC-protected. A process without Full Disk Access can stat (ls) files there but cannot open or copy them: 'Operation not permitted' on unzip/cat/cp. This is an OS-level wall, not the agent sandbox, so disabling the sandbox does not help. Discriminator from a Unix permission error: ls/stat succeeds while open/copy fails, and all three protected folders fail while non-protected dirs read fine. Fix: have a human move the file via Finder (which holds TCC access) to a non-protected dir, or grant the terminal/agent app Full Disk Access then restart it.",
+  "tags": [
+    "macos",
+    "tcc",
+    "sandbox",
+    "permissions",
+    "silent-failure"
+  ],
+  "triggers": [
+    "Operation not permitted reading a file in Downloads",
+    "cannot open zipfile Operation not permitted on macOS",
+    "unzip/cat/cp fails on Downloads/Desktop/Documents but ls works",
+    "macOS shell cannot read a file even with the sandbox disabled",
+    "all three of Downloads/Desktop/Documents blocked but other dirs read fine"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

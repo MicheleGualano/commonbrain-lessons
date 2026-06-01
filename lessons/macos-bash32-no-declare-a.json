@@ -1,0 +1,24 @@
+{
+  "id": "macos-bash32-no-declare-a",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/macos-bash32-no-declare-a.html",
+  "title": "macOS /bin/bash is 3.2 — no associative arrays, and it fails silently",
+  "rule": "macOS ships GNU bash 3.2 as /bin/bash, which has no associative arrays: declare -A prints 'declare: -A: invalid option' and, if you do not check errors, the script keeps running with every key collapsing onto index 0 (last write wins) — a silent wrong-result bug. Use #!/usr/bin/env bash to pick up a Homebrew bash 4+, or avoid associative arrays.",
+  "tags": [
+    "shell",
+    "bash",
+    "macos",
+    "silent-failure",
+    "gotcha"
+  ],
+  "triggers": [
+    "declare: -A: invalid option",
+    "associative array on macOS /bin/bash produced results for the wrong or last key only",
+    "m=([k]=v) keys all collide on index 0, last write wins",
+    "script ran fine on Linux bash 4 but was silently wrong on macOS"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

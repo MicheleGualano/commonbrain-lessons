@@ -1,0 +1,72 @@
+# Deploy the public commonbrain site to GitHub Pages.
+#
+# This builds the derived artifacts from the canonical lessons/ tree and
+# publishes them: the browsable HTML site plus a downloadable data endpoint
+# (lessons.jsonl) that the cbrain CLI's `sync` consumes.
+#
+# NOTE: GitHub Pages on the free tier requires the repository to be PUBLIC.
+# Enable Pages once under Settings -> Pages -> Build and deployment ->
+# Source: "GitHub Actions" (this workflow is the source; no branch needed).
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: the build job needs only read; deploy needs Pages + OIDC.
+permissions:
+  contents: read
+
+# Allow one concurrent deployment; let an in-progress run finish (don't cancel
+# a deploy mid-flight) but coalesce queued runs.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # build/lessons.jsonl: one compact record per line (the search/sync data).
+      - name: Build search index
+        run: python3 scripts/build_index.py
+
+      # html/index.html + html/<date>/<id>.html (and refreshes html_path).
+      - name: Build static site
+        run: python3 scripts/build_site.py
+
+      # Serve the data endpoint from the site root: <pages-url>/lessons.jsonl
+      - name: Publish data endpoint into site tree
+        run: cp build/lessons.jsonl html/lessons.jsonl
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    # Required to publish to Pages via the GitHub Actions source.
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

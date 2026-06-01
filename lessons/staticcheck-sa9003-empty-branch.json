@@ -1,0 +1,22 @@
+{
+  "id": "staticcheck-sa9003-empty-branch",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/staticcheck-sa9003-empty-branch.html",
+  "title": "staticcheck SA9003: an if-branch holding only a comment counts as empty",
+  "rule": "SA9003 fires when an `if` body contains no statements, even if it holds a comment — a comment is not a statement. Remove the `if` wrapper and keep the comment as plain code-level prose. If the wrapper is emitted by a code generator and the same condition wraps real statements in other output shapes, branch the TEMPLATE for the empty shape so the others stay intact (and watch leading-`{{-` whitespace trimming when you do).",
+  "tags": [
+    "go",
+    "staticcheck",
+    "sa9003",
+    "empty-branch"
+  ],
+  "triggers": [
+    "SA9003: empty branch",
+    "if cond { /* only a comment, no statements */ }",
+    "staticcheck flags an if with just a comment inside"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

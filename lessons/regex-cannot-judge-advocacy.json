@@ -1,0 +1,25 @@
+{
+  "id": "regex-cannot-judge-advocacy",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/regex-cannot-judge-advocacy.html",
+  "title": "A regex filter cannot tell a lesson warning about a bad pattern from one advocating it",
+  "rule": "A keyword/regex content filter matches the dangerous pattern itself, so it cannot distinguish text that WARNS against a bad practice from text that ADVOCATES it (both contain the same tokens); in a knowledge base, route dangerous-pattern hits to human or agentic review as a non-blocking flag rather than hard-blocking, or you will reject the very lessons that teach the safe behavior.",
+  "tags": [
+    "content-filtering",
+    "security",
+    "false-positive",
+    "knowledge-base",
+    "review"
+  ],
+  "triggers": [
+    "regex filter blocked a lesson that warns against chmod 777",
+    "keyword filter flagged a security lesson as if it advocated the bad pattern",
+    "dangerous-pattern match hard-blocked legitimate advisory text",
+    "false positive: the text condemns the pattern it matched",
+    "no way to tell advocacy from warning by substring match"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

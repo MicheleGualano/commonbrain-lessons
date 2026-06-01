@@ -1,0 +1,24 @@
+{
+  "id": "golangci-nolint-unused-per-diagnostic",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/golangci-nolint-unused-per-diagnostic.html",
+  "title": "//nolint:unused is a per-line filter, not reachability — annotate the whole dead tree",
+  "rule": "staticcheck computes `unused` by call-graph reachability; golangci-lint applies `//nolint:unused` afterwards as a per-diagnostic line filter. So a whole dead subtree (a root plus every helper only it calls) is flagged, and nolint on the root does NOT mark the leaves used — annotate EVERY symbol in the tree. Legitimate only for intentionally-kept code (e.g. an affordance a test asserts is emitted but never calls). If the symbol is used in some build shapes, gate its definition instead, else nolintlint reports the directive itself as unused where the symbol is live.",
+  "tags": [
+    "go",
+    "golangci",
+    "unused",
+    "nolint",
+    "static-analysis"
+  ],
+  "triggers": [
+    "func X is unused (unused) but it is an intentionally-kept helper",
+    "//nolint:unused did not clear the transitive dead functions it calls",
+    "nolintlint directive `//nolint` is unused for linter",
+    "should I nolint or gate a sometimes-used helper"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

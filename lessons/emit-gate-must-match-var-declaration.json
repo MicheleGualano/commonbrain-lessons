@@ -1,0 +1,25 @@
+{
+  "id": "emit-gate-must-match-var-declaration",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/emit-gate-must-match-var-declaration.html",
+  "title": "A generated block's emission gate must match the gate that declares the variable it uses",
+  "rule": "When generated code uses a local variable that a conditional branch declares, gate the emission on the exact condition that declares the variable, across every branch that verb/type can take, not the broader logical condition. A coarse gate (e.g. 'any write verb') can emit code referencing a variable a sibling branch never declares (e.g. a paginated path returning only data and err, no status), giving 'undefined: X' in just that shape. Make the load-bearing exclusion part of the gate. This is dead-code gating applied to a local variable; compile every shape via a matrix test.",
+  "tags": [
+    "codegen",
+    "compile-error",
+    "gating",
+    "templates",
+    "gotcha"
+  ],
+  "triggers": [
+    "undefined: X in generated code after adding a gated block",
+    "compile error only in one generator shape/variant",
+    "emitted code references a variable some branches do not declare",
+    "a broad method/type gate breaks a sibling code path",
+    "statusCode undefined in generated command"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

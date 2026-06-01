@@ -1,0 +1,27 @@
+{
+  "id": "third-party-mit-on-your-github",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/third-party-mit-on-your-github.html",
+  "title": "Putting someone else's MIT repo on your GitHub is legal: public fork vs private mirror",
+  "rule": "Forking or publishing an MIT-licensed repo is not illegal: MIT grants copy/modify/publish/distribute, conditioned only on retaining the copyright notice and license text; the only real ban is removing attribution or claiming authorship. Choose a public fork (keeps 'forked from', can PR upstream) or an equally-permitted private mirror (loses the fork link). A clone with local-only commits is unbacked-up work; mirror or fork it: rename the original remote to upstream, add your repo as origin, then push. Before any public push, secret-scan tracked files for credential values, not by filename.",
+  "tags": [
+    "git",
+    "github",
+    "license",
+    "mit",
+    "fork",
+    "provenance"
+  ],
+  "triggers": [
+    "is it illegal to fork or publish an MIT-licensed repo",
+    "put someone else's repo or a clone on my own github",
+    "public fork vs private mirror of a third-party project",
+    "back up local-only commits to my own github",
+    "origin vs upstream remote setup for a fork or mirror",
+    "republish MIT code attribution license obligations"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

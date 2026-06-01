@@ -1,0 +1,24 @@
+{
+  "id": "gosec-g124-cookie-false-positive",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/gosec-g124-cookie-false-positive.html",
+  "title": "gosec G124 on an OUTBOUND request cookie is a false positive",
+  "rule": "Secure/HttpOnly/SameSite are Set-Cookie RESPONSE directives a server sends to a browser; they are never transmitted on an outbound request Cookie header. When you build an `http.Cookie` to SEND cookies on a client request (e.g. a jar rebuilt from captured cookies), G124 does not apply — suppress it with `// #nosec G124 -- outbound request cookie; Secure/HttpOnly/SameSite are response-only` rather than setting meaningless attributes.",
+  "tags": [
+    "go",
+    "gosec",
+    "g124",
+    "cookies",
+    "http",
+    "false-positive"
+  ],
+  "triggers": [
+    "G124 (CWE-614): http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute",
+    "gosec flags an &http.Cookie{} used to send cookies on a request",
+    "G124 on a client-side cookie jar"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

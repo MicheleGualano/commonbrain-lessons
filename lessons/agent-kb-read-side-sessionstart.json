@@ -1,0 +1,27 @@
+{
+  "id": "agent-kb-read-side-sessionstart",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/agent-kb-read-side-sessionstart.html",
+  "title": "Make an agent actually USE a persistent resource in fresh sessions: a SessionStart hook, not just memory",
+  "rule": "A persistent resource (knowledge base, checklist, project log) only pays off if the agent consults it in a fresh, clean-context session. A memory note makes it 'known' but not retrieved: recall is probabilistic, a hook is deterministic. So add a SessionStart hook injecting the retrieval protocol plus a live, runtime-built index (jq, grep fallback) so it never goes stale. Emit it via hookSpecificOutput.additionalContext, or as raw stdout (which SessionStart appends to context). Exit 0 if absent so a failure is non-fatal. Pair with a Stop hook for the write side; inject the map, not the corpus.",
+  "tags": [
+    "agents",
+    "hooks",
+    "sessionstart",
+    "retrieval",
+    "knowledge",
+    "design"
+  ],
+  "triggers": [
+    "I built a knowledge base but I don't actually use it in new sessions",
+    "how do I make the agent check a resource at the start of every session",
+    "memory says it exists but I don't consult it with fresh context",
+    "SessionStart hook additionalContext to inject context every session",
+    "inject a live index / table of contents into every session",
+    "agent forgets to use the persistent notebook / archive"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

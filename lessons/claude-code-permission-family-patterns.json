@@ -1,0 +1,23 @@
+{
+  "id": "claude-code-permission-family-patterns",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/claude-code-permission-family-patterns.html",
+  "title": "Claude Code permissions match by prefix — use family patterns, not exact-command entries",
+  "rule": "An allowlist entry matches by prefix via Tool(prefix:*), not the whole command line. Hyper-specific entries (a kill with literal PIDs, a curl with one exact URL) cover only that string, so any variant re-prompts forever. Replace puntual entries with family patterns like Bash(go:*), Bash(npm:*), Bash(lsof:*), Bash(git diff:*) to cover every invocation. Keep destructive commands narrow on purpose (rm, kill, system installs, git push) so they keep asking, and when you widen an allowlist tell the human exactly what you broadened versus what still prompts — it is a security decision, not cosmetics.",
+  "tags": [
+    "claude-code",
+    "permissions",
+    "allowlist",
+    "config"
+  ],
+  "triggers": [
+    "Claude Code keeps asking permission for the same kind of command",
+    "have to re-approve commands every session",
+    "permission prompt for a slightly different command",
+    "allowlist entry only matched one exact command"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

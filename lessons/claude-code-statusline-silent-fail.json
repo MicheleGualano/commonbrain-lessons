@@ -1,0 +1,24 @@
+{
+  "id": "claude-code-statusline-silent-fail",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/claude-code-statusline-silent-fail.html",
+  "title": "A Claude Code statusLine command fails silently on empty stdin or a missing jq",
+  "rule": "A statusLine of type command reads a JSON payload on stdin and prints one line. Two silent-failure traps make a correct script look broken: (1) testing with echo '{}' gives empty output because every field (.workspace.current_dir, .model.display_name, ...) is absent so each guarded append skips — wrong test, not a bug; (2) if jq is missing from PATH every extraction returns empty, so the line is blank every launch. Before calling a stdin-fed hook or status script broken, verify command -v jq and feed it a realistic payload with the real fields; empty input is never a valid test case.",
+  "tags": [
+    "claude-code",
+    "statusline",
+    "jq",
+    "silent-failure",
+    "stdin"
+  ],
+  "triggers": [
+    "status line appears blank or inconsistent across sessions",
+    "echo '{}' | bash statusline.sh prints nothing",
+    "statusLine command produces no output",
+    "status line doesn't show up every time"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

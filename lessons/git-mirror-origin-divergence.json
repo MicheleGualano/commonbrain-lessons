@@ -1,0 +1,27 @@
+{
+  "id": "git-mirror-origin-divergence",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/git-mirror-origin-divergence.html",
+  "title": "After mirroring a repo (origin=your fork, upstream=theirs), do not git pull blind",
+  "rule": "Once you mirror a third-party repo and remap remotes so origin is your mirror and upstream is theirs, your local main diverges hard from upstream; a blind `git pull` merges upstream's history onto your commits and creates a tangle. Instead `git fetch upstream` deliberately, decide how to integrate, and `git push origin` to back up your mirror.",
+  "tags": [
+    "git",
+    "remotes",
+    "fork",
+    "mirror",
+    "upstream",
+    "merge"
+  ],
+  "triggers": [
+    "git pull created an unexpected merge from upstream onto my commits",
+    "Your branch and 'upstream/main' have diverged",
+    "have diverged, and have N and M different commits each, respectively",
+    "git pull on a mirrored repo pulled in the upstream's full history",
+    "origin points to my mirror but pull tracked upstream",
+    "Merge made by the 'ort' strategy after an unintended upstream pull"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

@@ -1,0 +1,11 @@
+{
+  "id": "gate-clean-sample",
+  "date": "2026-06-01",
+  "title": "Trim trailing whitespace before comparing generated output",
+  "rule": "Normalize trailing whitespace before diffing generated files, or cosmetic-only changes will mask the real diff.",
+  "tags": ["codegen", "testing", "gotcha"],
+  "triggers": ["golden diff shows only whitespace changes", "trailing space breaks a byte-for-byte snapshot compare"],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

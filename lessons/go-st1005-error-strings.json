@@ -1,0 +1,23 @@
+{
+  "id": "go-st1005-error-strings",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/go-st1005-error-strings.html",
+  "title": "staticcheck ST1005: error strings stay lowercase with no trailing punctuation",
+  "rule": "Error strings should start lowercase and end without a period, colon, or other punctuation, e.g. `fmt.Errorf(\"profile %q not found\")`. The reason is that errors get wrapped and concatenated into larger messages, so they must read as a clause, not a standalone sentence. Proper nouns and acronyms (HTTP, JSON) keep their case; only the leading ordinary word is lowercased.",
+  "tags": [
+    "go",
+    "staticcheck",
+    "st1005",
+    "errors",
+    "style"
+  ],
+  "triggers": [
+    "ST1005: error strings should not be capitalized",
+    "ST1005: error strings should not end with punctuation",
+    "staticcheck flags a capitalized fmt.Errorf message"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

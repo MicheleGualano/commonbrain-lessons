@@ -1,0 +1,24 @@
+{
+  "id": "claude-code-stop-hook-reminder",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/claude-code-stop-hook-reminder.html",
+  "title": "Recipe for an end-of-session reminder hook: once-per-session, work-gated, loop-safe",
+  "rule": "Event-driven automatic behavior in a coding agent belongs in a hook, not memory. For an end-of-work nudge use a session-stop hook whose script: (1) exits 0 at once if stop_hook_active is true, breaking the block-then-re-stop loop; (2) fires once per session via a marker file keyed on the session id; (3) proceeds only if the transcript shows a file-edit tool ran, a proxy for the unmeasurable I-learned-something; (4) returns a block decision with a reason so the nudge re-enters the model's context. Never block the flow: on any error, exit 0. Validate by piping it the stdin JSON it receives.",
+  "tags": [
+    "agent-hooks",
+    "automation",
+    "process",
+    "session-lifecycle"
+  ],
+  "triggers": [
+    "want an automatic end-of-session reminder or action in a coding agent",
+    "stop hook fires every turn and is too noisy",
+    "stop hook infinite loop",
+    "stop_hook_active",
+    "automate a recurring end-of-work behavior that needs a hook, not memory"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

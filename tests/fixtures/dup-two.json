@@ -1,0 +1,11 @@
+{
+  "id": "dup-two",
+  "date": "2026-06-01",
+  "title": "Duplicate fixture two",
+  "rule": "When a code generator emits a file named from user data it can clobber a generator-owned file of the same name.",
+  "tags": ["codegen", "gotcha"],
+  "triggers": ["generated file overwrote a generator-owned file of the same name", "undefined symbol after a same-named resource clobbered a helper file"],
+  "provenance": "contributed",
+  "contributor": "tester",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "go-install-stale-global-binary",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/go-install-stale-global-binary.html",
+  "title": "go build in a git hook refreshes the repo-local binary, not the go install-ed one on PATH",
+  "rule": "A git hook (or Makefile) that runs `go build` typically refreshes only the repo-local ./binary, leaving the globally `go install`-ed copy on your PATH stale; after a rebuild that should change behavior, re-run `go install ./...` and check `command -v <tool>` to confirm which binary you are actually invoking.",
+  "tags": [
+    "go",
+    "go-install",
+    "git-hook",
+    "path",
+    "build",
+    "stale-binary"
+  ],
+  "triggers": [
+    "behavior unchanged after rebuild because an old global binary is on PATH",
+    "command -v points to GOBIN/GOPATH bin not the repo build",
+    "go build succeeded but the installed CLI behaves like the old version",
+    "git hook ran go build but go install was never re-run",
+    "two copies of the same binary with different behavior"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

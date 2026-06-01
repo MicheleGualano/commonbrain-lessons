@@ -1,0 +1,281 @@
+# pr-gate — the BLOCKING CI gate for contribution Pull Requests.
+#
+# SECURITY MODEL (maximum posture). A contribution PR is UNTRUSTED. To stop a
+# malicious PR from weakening its own gate, NONE of the gate logic is ever run
+# from the PR's copy of the repo:
+#
+#   * base/  = the BASE repo at github.event.pull_request.base.sha — the trusted
+#              scripts/ + schema/. Every checker runs as base/scripts/<tool> so a
+#              PR cannot edit, delete, or shim it.
+#   * pr/    = the PR's merge result (refs/pull/<n>/merge), checked out with full
+#              history (fetch-depth: 0) so BASE_SHA and HEAD_SHA (the merge
+#              commit's parents) are present for an authoritative diff. pr/
+#              supplies ONLY the data under review (lessons/ + html/).
+#
+# The single REQUIRED status check on main must be `gate-passed`, which `needs`
+# every other job; that way no individual check can be silently left non-required
+# (see CONTRIBUTING.md > required checks).
+#
+# READ-ONLY gate: no secrets, no write permissions, no deploy.
+name: pr-gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # --- Gate 1: a contribution PR may change ONLY lessons/ and html/ -----------
+  path-allowlist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR merge (full history)
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 0
+      - name: Fail if the PR changes any path outside lessons/ or html/
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only "$BASE_SHA"..."$HEAD_SHA")"
+          echo "Changed paths in this PR:"
+          printf '%s\n' "$changed" | sed 's/^/  /'
+          violations=""
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            case "$f" in
+              lessons/*|html/*) : ;;
+              *) violations="${violations}${f}"$'\n' ;;
+            esac
+          done <<EOF
+          $changed
+          EOF
+          if [ -n "$violations" ]; then
+            echo "::error::A contribution PR may change only lessons/ and html/ (scripts/, schema/, .github/, *.md are maintainer-only)."
+            printf '%s' "$violations" | sed 's/^/  - /'
+            exit 1
+          fi
+          echo "path-allowlist: clean."
+
+  schema-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python3 -m pip install --upgrade jsonschema
+      - name: Validate changed lessons (run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          if [ -z "$changed" ]; then echo "schema-validate: no changed lessons."; exit 0; fi
+          mapfile -t files <<< "$changed"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          python3 base/scripts/validate_lessons.py "${pr_files[@]}"
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Secret HARD-FAIL scan over changed lessons + their HTML + changed html/* (run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          lessons="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          htmls="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'html/*')"
+          declare -A seen=()
+          add() { [ -n "$1" ] && [ -f "$1" ] && seen["$1"]=1; }
+          while IFS= read -r f; do [ -z "$f" ] && continue; add "pr/$f"
+            hp="$(python3 -c 'import json,sys; print((json.load(open(sys.argv[1])).get("html_path") or ""))' "pr/$f" 2>/dev/null || true)"
+            [ -n "$hp" ] && add "pr/$hp"
+          done <<< "$lessons"
+          while IFS= read -r h; do [ -z "$h" ] && continue; add "pr/$h"; done <<< "$htmls"
+          if [ "${#seen[@]}" -eq 0 ]; then echo "secret-scan: nothing to scan."; exit 0; fi
+          rc=0
+          for t in "${!seen[@]}"; do echo "== scrub --check $t =="; bash base/scripts/scrub_body.sh --check "$t" || rc=1; done
+          if [ "$rc" -ne 0 ]; then echo "::error::secret-scan blocked — a credential pattern matched."; exit 1; fi
+          echo "secret-scan: clean (${#seen[@]} file(s))."
+
+  injection-sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Anti-prompt-injection scan over changed lessons (scans their HTML too; run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          if [ -z "$changed" ]; then echo "injection-sanitize: no changed lessons."; exit 0; fi
+          mapfile -t files <<< "$changed"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          ( cd pr && python3 ../base/scripts/injection_sanitize.py "${files[@]}" )
+
+  html-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Scan ALL changed html/* directly (orphan pages too; run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'html/*')"
+          # only actual .html files (style.css etc. carry no injection surface)
+          html="$(printf '%s\n' "$changed" | grep -E '\.html$' || true)"
+          if [ -z "$html" ]; then echo "html-scan: no changed .html files."; exit 0; fi
+          mapfile -t files <<< "$html"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          python3 base/scripts/injection_sanitize.py --html "${pr_files[@]}"
+
+  generality-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Generality leak lint over changed lessons (run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          if [ -z "$changed" ]; then echo "generality-lint: no changed lessons."; exit 0; fi
+          mapfile -t files <<< "$changed"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          ( cd pr && python3 ../base/scripts/generality_lint.py "${files[@]}" )
+
+  generality-scorecard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python3 -m pip install --upgrade jsonschema
+      - name: Quality scorecard over changed lessons (whole chain runs from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          if [ -z "$changed" ]; then echo "generality-scorecard: no changed lessons."; exit 0; fi
+          mapfile -t files <<< "$changed"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          ( cd pr && python3 ../base/scripts/generality_scorecard.py "${files[@]}" )
+
+  dedup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Dedup over the WHOLE merged lessons set (run from base/)
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=( pr/lessons/*.json )
+          if [ "${#files[@]}" -eq 0 ]; then echo "dedup: no lessons."; exit 0; fi
+          printf 'Dedup over %d lesson(s).\n' "${#files[@]}"
+          python3 base/scripts/dedup.py "${files[@]}"
+
+  build-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Concat merged lessons -> lessons.jsonl and assert it parses
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob, json, os, sys
+          files = sorted(glob.glob('pr/lessons/*.json'))
+          if not files:
+              print('build-artifact: no lessons.'); sys.exit(0)
+          order = ['id','date','title','rule','tags','triggers','provenance','license','verified']
+          os.makedirs('build', exist_ok=True)
+          n = 0
+          with open('build/lessons.jsonl','w',encoding='utf-8') as out:
+              for p in files:
+                  try:
+                      lesson = json.load(open(p, encoding='utf-8'))
+                  except (OSError, json.JSONDecodeError) as e:
+                      print(f'::error::build-artifact: {p} invalid JSON: {e}'); sys.exit(1)
+                  if not isinstance(lesson, dict):
+                      print(f'::error::build-artifact: {p} not an object'); sys.exit(1)
+                  out.write(json.dumps({k: lesson[k] for k in order if k in lesson}, ensure_ascii=False, separators=(',',':'))+'\n')
+                  n += 1
+          with open('build/lessons.jsonl', encoding='utf-8') as f:
+              for i, line in enumerate(f, 1):
+                  if not line.strip():
+                      print(f'::error::build-artifact: empty line {i}'); sys.exit(1)
+                  obj = json.loads(line)
+                  if not isinstance(obj, dict) or 'id' not in obj:
+                      print(f'::error::build-artifact: line {i} not a lesson record'); sys.exit(1)
+          print(f'build-artifact: {n} record(s) — lessons.jsonl is valid.')
+          PY
+      - name: Upload lessons.jsonl artifact (only when the build passed)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lessons-jsonl
+          path: build/lessons.jsonl
+          if-no-files-found: ignore
+
+  # --- Single REQUIRED check: succeeds only if every gate above passed --------
+  gate-passed:
+    runs-on: ubuntu-latest
+    needs: [path-allowlist, schema-validate, secret-scan, injection-sanitize, html-scan, generality-lint, generality-scorecard, dedup, build-artifact]
+    steps:
+      - run: echo "All commonbrain gate checks passed."

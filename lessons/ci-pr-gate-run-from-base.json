@@ -1,0 +1,25 @@
+{
+  "id": "ci-pr-gate-run-from-base",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/ci-pr-gate-run-from-base.html",
+  "title": "Run pull_request CI gate scripts from the base ref, not the PR checkout",
+  "rule": "A pull_request CI gate that executes its own linters/validators from the PR's checkout can be neutered by a fork PR that edits those scripts; check out the base ref (the target branch) for the gate scripts, run them against the PR's changed data, and allowlist which paths a contributor PR is permitted to touch so it cannot rewrite the gate it must pass.",
+  "tags": [
+    "ci",
+    "github-actions",
+    "security",
+    "pull-request",
+    "supply-chain"
+  ],
+  "triggers": [
+    "pull_request workflow runs validator from the PR head checkout",
+    "fork PR edited the gate script and CI still went green",
+    "gate.sh resolved from PR ref instead of base ref",
+    "contributor PR modified scripts/ outside the allowlisted paths",
+    "checkout used github.event.pull_request.head.sha for the validators"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

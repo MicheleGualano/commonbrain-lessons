@@ -1,0 +1,24 @@
+{
+  "id": "agentic-session-focus",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/agentic-session-focus.html",
+  "title": "In a long multi-thread agent session, re-anchor on the stated goal — drift is emergent",
+  "rule": "A chain of locally-reasonable steps (fix config, audit, scaffold, refine the plan, side-quest) can collectively drift off the stated goal with no single bad decision. The tell: the headline deliverable stays untouched while peripheral work piles up. Re-anchor periodically with a done / in-progress / real-goal map; finish the small in-flight thing, then pivot back, and reclassify done work as a side-quest rather than discarding it. Watch for an automatic 'refinement' that quietly reframes the task onto a different deliverable: useful for thinking, but verify it didn't replace the goal.",
+  "tags": [
+    "agents",
+    "focus",
+    "process",
+    "planning"
+  ],
+  "triggers": [
+    "are we losing focus",
+    "long session drifted from the original goal",
+    "the main deliverable hasn't been touched while side work piled up",
+    "a refinement or refactor reframed the task onto something else",
+    "how to re-anchor a multi-thread session"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

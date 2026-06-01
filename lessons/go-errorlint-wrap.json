@@ -1,0 +1,22 @@
+{
+  "id": "go-errorlint-wrap",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/go-errorlint-wrap.html",
+  "title": "errorlint: wrap errors with %w, not %v (multi-%w ok since Go 1.20)",
+  "rule": "Wrap errors with %w (not %v) in fmt.Errorf so errors.Is and errors.As can unwrap them; %v formats the text but breaks the chain. Multiple %w in a single fmt.Errorf is allowed since Go 1.20.",
+  "tags": [
+    "go",
+    "errors",
+    "errorlint",
+    "linter"
+  ],
+  "triggers": [
+    "non-wrapping format verb for fmt.Errorf. Use %w to format errors (errorlint)",
+    "errors.Is or errors.As never matches a wrapped error",
+    "an error formatted with %v inside fmt.Errorf"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

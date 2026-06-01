@@ -1,0 +1,25 @@
+{
+  "id": "branch-pr-not-direct-main",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/branch-pr-not-direct-main.html",
+  "title": "Branch and PR even for 'quick' fixes — 'do it now' means land it fast, not skip review",
+  "rule": "In a repo with an established PR workflow, default to branch-then-PR even for a one-line fix. 'Do it quickly' means LAND it fast, not skip review. A direct push to the default branch can be DENIED by the harness or auto-mode classifier as bypassing review; the sanctioned fast path is branch, open a PR, then squash-merge with branch delete (merging a PR is allowed even when pushing to the default branch is not). Treat a push-to-main denial as the SIGNAL to switch to the PR flow, not a wall to work around — branch plus PR plus merge is nearly as fast and keeps the audit trail.",
+  "tags": [
+    "git",
+    "github",
+    "workflow",
+    "process",
+    "pull-request"
+  ],
+  "triggers": [
+    "push to main denied or blocked by the classifier",
+    "is it ok to commit directly to main for a quick fix",
+    "quick fix — should I skip the PR",
+    "fast path that still keeps PR review",
+    "merging a PR allowed but pushing to the default branch denied"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

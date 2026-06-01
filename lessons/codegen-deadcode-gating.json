@@ -1,0 +1,25 @@
+{
+  "id": "codegen-deadcode-gating",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/codegen-deadcode-gating.html",
+  "title": "Gate a generated definition on the OR of its real call-site conditions, plus its imports",
+  "rule": "When a generator emits a definition under condition A but its call sites are gated under B and C (both strict subsets of A), output shapes in A but not in B or C ship the definition with no caller, so the linter flags it dead. Gate the definition on (B || C), the exact OR of the real call-site conditions, not a convenient superset. Then gate the orphaned imports on that same condition: a format-only import pass (goimports/gofmt without removal) reorders but does not strip them, giving an 'imported and not used' compile error. Compile and lint every shape, not just the convenient one.",
+  "tags": [
+    "codegen",
+    "dead-code",
+    "linter",
+    "imports",
+    "gating"
+  ],
+  "triggers": [
+    "func X is unused (unused)",
+    "X declared and not used",
+    "imported and not used after removing or gating a function in a template",
+    "generated code has dead functions only in some feature/auth shape",
+    "goimports FormatOnly did not strip the orphaned import"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

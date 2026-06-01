@@ -1,0 +1,25 @@
+{
+  "id": "lint-the-shape-space-not-snapshots",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/lint-the-shape-space-not-snapshots.html",
+  "title": "Lint a code generator's whole shape space, not just its golden snapshots",
+  "rule": "Golden/snapshot tests only text-compare output; they never run a linter or compiler, so dead-code and security findings hide in generated shapes no fixture exercises. Add an expensive-flag-gated matrix test that regenerates every shape (internal specs, every golden fixture, plus committed probes for branches no fixture reaches) and runs the real ship lint/security gate per shape, asserting zero findings via exit code. Run subtests serially if the linter holds a global lock. To reach a finding behind a flag, build a minimal probe that flips it; single- vs multi-input cases take different paths.",
+  "tags": [
+    "codegen",
+    "testing",
+    "linter",
+    "golden",
+    "regression"
+  ],
+  "triggers": [
+    "golden/snapshot suite is green but generated code has dead code or lint findings",
+    "how to lint every generated shape of a code generator",
+    "a bug hides in an output shape no fixture exercises",
+    "regression guard for generated-output quality",
+    "build a probe spec to reach a feature/auth fork the fixtures miss"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

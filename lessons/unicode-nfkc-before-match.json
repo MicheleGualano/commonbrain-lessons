@@ -1,0 +1,26 @@
+{
+  "id": "unicode-nfkc-before-match",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/unicode-nfkc-before-match.html",
+  "title": "Normalize and strip unicode before keyword matching or filters are trivially evaded",
+  "rule": "Naive keyword/regex filters are bypassed by fullwidth forms, look-alike homoglyphs from other scripts (Cyrillic, Greek, Cherokee, Armenian), zero-width separators, and combining marks that split a banned word; NFKC- or NFKD-normalize the input, drop format (Cf) and combining (Mn/Mc/Me) characters, then match, and flag any token that mixes alphabets from more than one script.",
+  "tags": [
+    "unicode",
+    "security",
+    "normalization",
+    "homoglyph",
+    "content-filtering"
+  ],
+  "triggers": [
+    "keyword filter missed a banned word written in fullwidth characters",
+    "homoglyph from Cyrillic/Greek slipped past the regex filter",
+    "zero-width space split the matched token so the filter saw nothing",
+    "combining mark diacritic evaded the banned-word check",
+    "mixed-script token was not flagged before matching",
+    "match worked only after unicodedata.normalize NFKC"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

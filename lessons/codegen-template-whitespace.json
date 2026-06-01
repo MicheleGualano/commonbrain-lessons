@@ -1,0 +1,24 @@
+{
+  "id": "codegen-template-whitespace",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/codegen-template-whitespace.html",
+  "title": "Go text/template: a leading {{- eats the preceding blank line",
+  "rule": "In Go text/template a leading {{- trims all preceding whitespace including newlines (and -}} trims what follows). To keep a separator blank line, put it inside the branch right after {{if}}/{{else}}, never before the {{- if}} — otherwise one template edit churns cosmetic-only diffs across unrelated golden files.",
+  "tags": [
+    "go",
+    "templates",
+    "codegen",
+    "whitespace",
+    "golden"
+  ],
+  "triggers": [
+    "a blank line disappeared from generated output",
+    "golden/snapshot diff churns across many unrelated files after one template edit",
+    "added a {{- if}}/{{- else}} and byte-identical output for other cases broke",
+    "template dash {{- ate a newline or blank line"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

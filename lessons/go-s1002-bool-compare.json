@@ -1,0 +1,24 @@
+{
+  "id": "go-s1002-bool-compare",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/go-s1002-bool-compare.html",
+  "title": "staticcheck S1002: never compare a bool to a bool constant",
+  "rule": "Comparing a boolean to a boolean literal is redundant: `x == true` and `x != false` simplify to `x`; `x == false` and `x != true` simplify to `!x`. This often sneaks into generated code via an include-if-non-zero idiom like `if field != <zeroValue>`, which renders `!= false` for a bool field. Fix it at the source with a type-aware guard (emit `if field` for bools) rather than patching each generated site by hand.",
+  "tags": [
+    "go",
+    "staticcheck",
+    "s1002",
+    "codegen",
+    "booleans"
+  ],
+  "triggers": [
+    "S1002: should omit comparison to bool constant",
+    "can be simplified to flag",
+    "if x != false",
+    "if x == true"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

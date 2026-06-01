@@ -1,0 +1,24 @@
+{
+  "id": "gosec-nosec-own-line",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/gosec-nosec-own-line.html",
+  "title": "gosec/golangci suppression comments must be on their OWN line, with a reason",
+  "rule": "Put `// #nosec <RULE> -- <concrete reason>` (and `//nolint:<linter> // why`) on the line ABOVE the flagged statement, never trailing it: many formatters and code generators move or drop trailing comments, so a trailing suppression silently stops being honored. The reason must say WHY it is safe here (controlled input, a path you own, a value that is not attacker-reachable), and suppress only that single line.",
+  "tags": [
+    "go",
+    "gosec",
+    "nosec",
+    "nolint",
+    "static-analysis"
+  ],
+  "triggers": [
+    "a trailing // #nosec got stripped during formatting or code generation",
+    "#nosec not honored",
+    "need to suppress a gosec or golangci finding safely",
+    "nolint directive ignored after gofmt or goimports"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

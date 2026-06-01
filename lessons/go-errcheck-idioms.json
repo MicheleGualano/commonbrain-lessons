@@ -1,0 +1,24 @@
+{
+  "id": "go-errcheck-idioms",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/go-errcheck-idioms.html",
+  "title": "errcheck / gosec G104: make ignoring an error explicit with _ =",
+  "rule": "A bare `defer x.Close()` or unused return is an errcheck/G104 finding. To intentionally drop an error, assign it to the blank identifier: `_ = f()` for a plain call, `_, _ = fmt.Sscanf(...)` for multiple returns, and `defer func() { _ = c.Close() }()` for a deferred Close/Flush/Remove (you cannot put `_ =` directly on a `defer`). The blank assignment is what tells the linter the omission is deliberate.",
+  "tags": [
+    "go",
+    "errcheck",
+    "gosec",
+    "g104",
+    "error-handling"
+  ],
+  "triggers": [
+    "Error return value of `x.Close` is not checked (errcheck)",
+    "Error return value of `fmt.Sscanf` is not checked (errcheck)",
+    "G104 (CWE-703): Errors unhandled",
+    "unchecked defer Close()/Flush()/Remove()"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

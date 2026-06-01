@@ -1,0 +1,27 @@
+{
+  "id": "lint-needs-compile-first",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/lint-needs-compile-first.html",
+  "title": "Type-aware Go linters report a fake 0 findings on a package that does not compile",
+  "rule": "Type-aware analyzers (gosec, staticcheck, golangci-lint) need a buildable package to load types; on a package with a build error they silently yield zero findings, which reads as a false 'clean'. Build first, then lint, and treat a jump from 0 to N findings right after a build fix as confirmation the earlier zero was masked, not earned.",
+  "tags": [
+    "go",
+    "linter",
+    "gosec",
+    "staticcheck",
+    "golangci-lint",
+    "ci"
+  ],
+  "triggers": [
+    "gosec reports 0 findings but the package fails to build",
+    "Summary: Issues: 0 from a linter that should have flagged something",
+    "could not load export data: no export data for",
+    "staticcheck: could not analyze package because it does not compile",
+    "findings jumped from 0 to N after fixing a compile error",
+    "level=error msg=\"failed to load packages\" typecheck"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

@@ -1,0 +1,24 @@
+{
+  "id": "shell-heredoc-unquoted-expands",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/shell-heredoc-unquoted-expands.html",
+  "title": "An unquoted heredoc (<<EOF) expands $(...) and backticks in its body",
+  "rule": "An unquoted heredoc (<<EOF) expands $var, $(...) and backticks in its body, so prose containing them silently runs as commands; quote the delimiter (<<'EOF') to make the body fully literal, but that also disables ${var}. When you need both literal metacharacters and real interpolation, assemble the string with printf or jq --arg instead of relying on <<EOF.",
+  "tags": [
+    "shell",
+    "bash",
+    "heredoc",
+    "gotcha",
+    "silent-failure"
+  ],
+  "triggers": [
+    "bash: command not found from a word inside a heredoc body",
+    "cat <<EOF executed a backtick or $(...) instead of keeping it literal",
+    "warning: here-document delimited by end-of-file",
+    "text built with <<EOF got mangled or ran a command unexpectedly"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

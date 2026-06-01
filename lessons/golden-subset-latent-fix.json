@@ -1,0 +1,26 @@
+{
+  "id": "golden-subset-latent-fix",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/golden-subset-latent-fix.html",
+  "title": "A fix to a file outside the golden-snapshot subset stays latent: committed, green, never exercised",
+  "rule": "Golden/snapshot suites often capture a curated SUBSET of generated files, so a fix to a file outside that subset is latent: it commits, the golden diff stays green, but nothing actually exercises the change. Verify such fixes with a full regeneration and a build/test of the real output, not by trusting the golden diff.",
+  "tags": [
+    "golden-test",
+    "snapshot-test",
+    "codegen",
+    "testing",
+    "regression"
+  ],
+  "triggers": [
+    "golden test passed but the bug is still present in real output",
+    "fix to a generated file shows no diff in the snapshot suite",
+    "golden fixtures only cover a subset of generated files",
+    "green snapshot tests for a file the suite never captures",
+    "the fixed file is not part of the golden corpus",
+    "full regeneration revealed a change the golden diff missed"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

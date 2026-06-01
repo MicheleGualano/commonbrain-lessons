@@ -1,0 +1,25 @@
+{
+  "id": "go-flag-stops-at-first-positional",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/go-flag-stops-at-first-positional.html",
+  "title": "Go's flag package stops parsing at the first positional, silently ignoring trailing flags",
+  "rule": "Go's stdlib flag package stops at the first non-flag token, so any -flag placed after a positional argument is silently dropped (no error, just the default value). Either pull positionals out before calling flag.Parse, or parse in a loop interleaving flags and args; never assume callers will put flags first.",
+  "tags": [
+    "go",
+    "flag",
+    "cli",
+    "argument-parsing",
+    "stdlib"
+  ],
+  "triggers": [
+    "a flag set after a positional argument had no effect",
+    "flag.Args() contains tokens that look like -flags",
+    "flag stayed at its default value despite being passed on the command line",
+    "myprog cmd value --verbose ignored --verbose",
+    "flag.Parse stopped at the first non-flag argument"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

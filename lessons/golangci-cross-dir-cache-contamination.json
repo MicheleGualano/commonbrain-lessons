@@ -1,0 +1,24 @@
+{
+  "id": "golangci-cross-dir-cache-contamination",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/golangci-cross-dir-cache-contamination.html",
+  "title": "golangci stale cache: a finding's path points at a different copy of the module",
+  "rule": "golangci-lint's build cache and unused-facts are content-keyed, not path-keyed. Lint two directories that hold modules with an identical module-path and identical content and the second run can report findings whose file paths point at the FIRST directory — the cache returns the first-seen path. Symbol names stay correct; only the path lies. Fix with `golangci-lint cache clean` and remove the duplicate dir before re-linting. When you regenerate-to-scratch and lint repeatedly, use a fresh output directory each run (or clean the cache) so paths stay truthful.",
+  "tags": [
+    "go",
+    "golangci",
+    "cache",
+    "gotcha",
+    "static-analysis"
+  ],
+  "triggers": [
+    "golangci finding path shows a different directory than the one you linted",
+    "lint reports a file in another scratch or temp directory",
+    "stale golangci cross-directory artifact",
+    "unused finding references the wrong copy of an identical module"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

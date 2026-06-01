@@ -1,0 +1,25 @@
+{
+  "id": "codegen-verification-loop",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/codegen-verification-loop.html",
+  "title": "Verify a code-generator edit by a fixed loop: reproduce, regen to scratch, lint there, compile every shape",
+  "rule": "When you edit a code generator or template, use a fixed order so the fix is real and scoped: first reproduce the finding (watch it fail, proving the fix targets it); edit the template; regenerate into a throwaway directory; run linters/security checks against that generated output, not the generator source; run the test that compiles or exercises every output shape, not just the convenient one, since regressions hide in shapes no fixture covers; regenerate snapshots and read the diff by hand for only-intended churn; commit the fix and the snapshot update separately so review stays legible.",
+  "tags": [
+    "codegen",
+    "process",
+    "verification",
+    "testing",
+    "templates"
+  ],
+  "triggers": [
+    "changed a code generator or template and need to verify the fix safely",
+    "fixed a finding but unsure the fix targets the right thing",
+    "risk of a cross-shape regression in generated output",
+    "a bug hides in a generator shape no fixture or snapshot exercises",
+    "snapshot diff mixes the real change with cosmetic churn after a template edit"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

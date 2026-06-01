@@ -1,0 +1,25 @@
+{
+  "id": "dogfood-finds-contract-bugs",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/dogfood-finds-contract-bugs.html",
+  "title": "'Validates clean' is not 'correct instructions' — dogfood the real path to catch wrong commands",
+  "rule": "Manifest/schema validation checks structure, not the command strings embedded in docs, skills, or prose — a package can validate clean yet ship a wrong flag or invocation. Running the documented command on a real case (dogfood) is what surfaces the contract bug, and running it often produces the fix. Concrete: a doc shipped a positional argument while the CLI required a named flag; validation passed, only execution failed ('Error: --file is required'). When authoring instructions that cite a tool's flags or shape, verify against the tool (--help or run it), not from memory.",
+  "tags": [
+    "dogfood",
+    "verification",
+    "documentation",
+    "authoring",
+    "cli"
+  ],
+  "triggers": [
+    "package validates clean but the documented command is wrong",
+    "a skill or doc cites the wrong flag for a CLI",
+    "validation passed but the command errors at runtime",
+    "Error: --file is required",
+    "manifest validation doesn't check command strings inside docs"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

@@ -1,0 +1,26 @@
+{
+  "id": "claude-code-plugin-distribution",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/claude-code-plugin-distribution.html",
+  "title": "Claude Code plugin layout: only plugin.json in .claude-plugin/, everything else at the root; distribute via marketplace.json",
+  "rule": "In a Claude Code plugin, only plugin.json lives in .claude-plugin/; skills/ agents/ hooks/ .mcp.json and bin/ all live at the plugin root — nested under .claude-plugin/ they are silently not loaded. A plugin can declare MCP servers (.mcp.json, where ${CLAUDE_PLUGIN_ROOT} resolves) and a bin/ dir auto-added to PATH while enabled. Distribute via a .claude-plugin/marketplace.json, then /plugin marketplace add <git-url> and /plugin install <name>@<marketplace>. No manifest field can require an external binary, so verify prerequisites with a SessionStart 'command -v' hook.",
+  "tags": [
+    "claude-code",
+    "plugin",
+    "mcp",
+    "distribution",
+    "marketplace"
+  ],
+  "triggers": [
+    "where do skills/ agents/ hooks/ .mcp.json go in a plugin (root vs .claude-plugin)",
+    "skills not detected when nested under .claude-plugin/",
+    "can a Claude Code plugin bundle or declare an MCP server",
+    "how to distribute a Claude Code plugin to a team or privately",
+    "marketplace.json for /plugin install",
+    "plugin depends on an external CLI binary and you need it installed"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

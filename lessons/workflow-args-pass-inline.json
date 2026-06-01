@@ -1,0 +1,25 @@
+{
+  "id": "workflow-args-pass-inline",
+  "date": "2026-06-01",
+  "html_path": "html/2026-06-01/workflow-args-pass-inline.html",
+  "title": "Workflow args may arrive as a string, so array methods on them throw",
+  "rule": "When a Workflow/orchestration step passes array or object data through args, the script can receive it serialized as a string, so calling args.map/.filter/.forEach throws; either inline the data as a literal const in the script body, or coerce defensively with typeof args === \"string\" ? JSON.parse(args) : args before iterating.",
+  "tags": [
+    "workflow",
+    "javascript",
+    "serialization",
+    "args",
+    "gotcha"
+  ],
+  "triggers": [
+    "TypeError: args.map is not a function",
+    "TypeError: X.filter is not a function inside a workflow step",
+    "args is a string but the script expected an array",
+    "args.forEach is not a function",
+    "typeof args === \"string\" when an object was passed"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

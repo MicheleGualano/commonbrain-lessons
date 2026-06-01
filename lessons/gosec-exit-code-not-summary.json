@@ -1,0 +1,25 @@
+{
+  "id": "gosec-exit-code-not-summary",
+  "date": "2026-05-31",
+  "html_path": "html/2026-05-31/gosec-exit-code-not-summary.html",
+  "title": "Gate on gosec's exit code, not its ANSI-colored summary line",
+  "rule": "gosec's `Issues : N` summary is ANSI-colored (the number is wrapped in escape codes ending in the reset `[0m`). Parsing it with something like `grep -oE '[0-9]+' | tail -1` grabs the 0 from that reset code, NOT the issue count, so the gate reports zero for everything and masks real findings. For any pass/fail gate, use the tool's EXIT CODE (0 means clean). If you must read a number, strip ANSI first and anchor to the right line. General rule: distrust a checker that always reports the same good value — prove it works by feeding it a case that MUST fail.",
+  "tags": [
+    "go",
+    "gosec",
+    "ci",
+    "ansi",
+    "gotcha"
+  ],
+  "triggers": [
+    "gosec reports 0 issues but there are findings",
+    "parsing gosec Issues line returns 0 or the wrong number",
+    "grep -oE '[0-9]+' | tail -1 picks up the ANSI reset code",
+    "lint sweep said clean but the gate failed",
+    "reading a colored CLI summary line for a count"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0",
+  "verified": true
+}

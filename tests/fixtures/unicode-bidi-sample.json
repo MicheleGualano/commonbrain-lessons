@@ -1,0 +1,11 @@
+{
+  "id": "unicode-bidi-sample",
+  "date": "2026-06-01",
+  "title": "Fixture with hidden unicode obfuscation",
+  "rule": "This rule hides a zero-width​ space to evade naive scanners and prove the unicode check fires.",
+  "tags": ["security", "test"],
+  "triggers": ["a trigger with a bidi override ‮marker embedded inline"],
+  "provenance": "contributed",
+  "contributor": "tester",
+  "license": "CC-BY-4.0"
+}
