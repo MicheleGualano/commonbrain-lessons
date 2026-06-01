@@ -1,0 +1,16 @@
+{
+  "id": "github-free-private-no-branch-protection",
+  "date": "2026-06-01",
+  "title": "GitHub free tier: private repos cannot enforce required status checks",
+  "rule": "On GitHub's free plan, private repositories cannot enforce required status checks: both classic branch protection and the newer repository rulesets return HTTP 403 ('Upgrade to GitHub Pro or make this repository public') on the API and in repository settings. Never assume a green check blocks merge there; defer any merge-gate enforcement until the repo is public (where it is free) or on a paid plan. Meanwhile rely on the CI checks still running on pull requests and on maintainer discipline.",
+  "tags": ["github", "branch-protection", "ci-cd", "devops"],
+  "triggers": [
+    "Upgrade to GitHub Pro or make this repository public",
+    "branch protection 403 on a private repo",
+    "required status checks not available on free private repo",
+    "repository rulesets return 403 upgrade to pro"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
