@@ -25,10 +25,27 @@ jobs:
       github.event.pull_request.head.repo.fork == false &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association)
     steps:
-      - name: Enable auto-merge (waits for the required gate-passed check)
+      - name: Auto-merge once the required gate-passed check is green
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          gh pr merge "${{ github.event.pull_request.number }}" \
-            --repo "${{ github.repository }}" --squash --auto \
-            || echo "auto-merge not scheduled (already merged/closed, or no pending required check) — benign"
+          set -uo pipefail
+          concl=$(gh api "repos/$REPO/commits/$SHA/check-runs" \
+                    --jq '.check_runs[] | select(.name=="gate-passed") | .conclusion' 2>/dev/null | head -1)
+          echo "gate-passed conclusion: ${concl:-<pending>}"
+          if [ "$concl" = "success" ]; then
+            # Verified green just above → safe to merge now (direct, with --auto fallback
+            # if the branch must first be brought up to date under strict protection).
+            gh pr merge "$PR" --repo "$REPO" --squash \
+              || gh pr merge "$PR" --repo "$REPO" --squash --auto \
+              || echo "merge not completed (already merged/closed) — benign"
+          elif [ -z "$concl" ] || [ "$concl" = "null" ]; then
+            # Still running → schedule auto-merge; GitHub completes it ONLY when gate-passed is green.
+            gh pr merge "$PR" --repo "$REPO" --squash --auto \
+              || echo "auto-merge not scheduled — benign"
+          else
+            echo "gate-passed=$concl (not success) → NOT merging."
+          fi
