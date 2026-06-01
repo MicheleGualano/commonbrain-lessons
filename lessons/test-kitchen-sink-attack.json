@@ -1,0 +1,14 @@
+{
+  "id": "test-kitchen-sink-attack",
+  "date": "2026-06-01",
+  "title": "Gate test: planted secret and a home path in one lesson",
+  "rule": "This deliberately poisoned test lesson plants a fake credential sk-ant-api03-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa and a developer home path /Users/jane/projects/app/build.sh so the secret scanner and the generality leak linter both reject it. It should never be merged.",
+  "tags": ["gate-test", "security", "secret-scan"],
+  "triggers": [
+    "planted credential and home path in a contribution",
+    "secret-scan and generality-lint should both block this"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
