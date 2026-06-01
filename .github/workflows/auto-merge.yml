@@ -1,0 +1,34 @@
+# Auto-merge TRUSTED, same-repo PRs once the deterministic gate is green.
+#
+# Only the maintainer's own PRs (same repo, not a fork, author OWNER/MEMBER/COLLABORATOR)
+# are auto-merged. External/fork contributions are NEVER auto-merged — they wait for a
+# human merge (the review-summary bot helps the maintainer decide).
+#
+# `gh pr merge --auto` schedules the merge; GitHub completes it ONLY when the required
+# status check `gate-passed` (the deterministic security/quality gate) is green. So the
+# AI advisory bot can never cause a merge — this is purely deterministic + trust-scoped.
+name: auto-merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.head.repo.fork == false &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association)
+    steps:
+      - name: Enable auto-merge (waits for the required gate-passed check)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" --squash --auto \
+            || echo "auto-merge not scheduled (already merged/closed, or no pending required check) — benign"

@@ -1,0 +1,47 @@
+# Plain-Italian "review helper" comment on every PR (ADVISORY ONLY).
+#
+# Security model: this runs as `pull_request_target`, so it executes from the BASE
+# repo (trusted) and can comment + read the optional ANTHROPIC_API_KEY secret even for
+# fork PRs. It must NEVER check out or execute PR-supplied code — scripts/review_summary.py
+# reads the PR's changed lesson CONTENT as data via the GitHub API. The AI section is
+# advisory and has NO merge authority; merging is gated solely by the deterministic
+# `gate-passed` check (+ human merge for external PRs).
+name: review-summary
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: review-summary-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      # Default ref for pull_request_target is the BASE branch (main) — trusted.
+      # We deliberately do NOT check out the PR head.
+      - name: Checkout base (trusted)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Post review helper comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
+        run: python3 scripts/review_summary.py

@@ -46,6 +46,8 @@ If you keep a private brain, `cbrain publish <local-id>` will scrub, generalize,
 
 `schema-validate` · `secret-scan` · `injection-sanitize` · `generality-lint` · `generality-scorecard` · `dedup` · `build-artifact`. Posture is **maximum** — a borderline lesson is blocked and returned for editing rather than waved through. By contributing you agree to license your lesson under **CC BY 4.0**.
 
+See **[REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md)** for a plain-language list of everything that is checked on every PR — and what the human maintainer decides. On each PR a bot posts a review-helper comment that applies that checklist (machine results + an advisory AI opinion); the merge itself stays gated by `gate-passed` and, for external contributions, by a human merge.
+
 ## This repo is the standard — and the only path
 
 There is exactly one way a lesson reaches the public site: a **Pull Request to this canonical repository** that conforms to the schema, passes the full gate, and is merged by a maintainer. The hosted API is read-only; the database is written only by the post-merge sync. There is no other submission channel.
