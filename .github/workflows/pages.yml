@@ -13,6 +13,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Hourly self-heal: a merge performed by the Actions token (auto-merge) does not,
+  # by GitHub's design, trigger this workflow — so rebuild on a schedule too.
+  schedule:
+    - cron: '17 * * * *'
 
 # Least privilege: the build job needs only read; deploy needs Pages + OIDC.
 permissions:
