@@ -34,6 +34,8 @@ echo "[gate orchestrator]"
 assert 0 "clean -> PASS"       bash    "$SCRIPTS/gate.sh" "$FX/gate-clean-sample.json"
 assert 1 "secret -> BLOCKED"   bash    "$SCRIPTS/gate.sh" "$FX/secret-token-sample.json"
 assert 1 "injection -> BLOCKED" bash   "$SCRIPTS/gate.sh" "$FX/injection-override-sample.json"
+echo "[retrieval-eval]"
+assert 0 "search recall + abstention" python3 "$SCRIPTS/eval_search.py"
 
 echo
 echo "RESULT: $pass passed, $fail failed"
