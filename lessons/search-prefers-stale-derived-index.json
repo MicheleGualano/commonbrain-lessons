@@ -1,0 +1,27 @@
+{
+  "id": "search-prefers-stale-derived-index",
+  "date": "2026-06-04",
+  "title": "A searcher that prefers a derived index over the source serves stale results silently",
+  "rule": "A search tool that loads a precomputed derived index (a built jsonl, an embedding store, a cache) instead of the canonical source silently misses every record added or edited since the last build, and the failure looks like a ranking or threshold bug rather than a data bug. Fix: rebuild the index from source before trusting results; point evals and tests at the same index the tool ships, or rebuild first; and treat 'an exact-string query that should rank first returns nothing' as a staleness signal, not a scorer signal.",
+  "tags": [
+    "retrieval",
+    "search",
+    "caching",
+    "indexing",
+    "stale-artifact",
+    "silent-failure",
+    "testing",
+    "gotcha"
+  ],
+  "triggers": [
+    "an exact-match query returns nothing or the wrong hit but the record exists in the source files",
+    "search returns stale results after adding or editing a record",
+    "retrieval tool reads a built index file instead of the source of truth",
+    "an eval or test reports a recall failure but the document is present on disk",
+    "abstention or a low score on a query whose exact trigger string is in the corpus",
+    "rebuilt the source data but search behavior did not change"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
