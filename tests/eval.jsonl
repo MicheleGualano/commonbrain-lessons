@@ -1,0 +1,13 @@
+{"query": "ST1005: error strings should not be capitalized", "expect": "go-st1005-error-strings"}
+{"query": "non-wrapping format verb for fmt.Errorf. Use %w to format errors (errorlint)", "expect": "go-errorlint-wrap"}
+{"query": "Error return value of `x.Close` is not checked (errcheck)", "expect": "go-errcheck-idioms"}
+{"query": "Repository has been locked 403 after changing visibility", "expect": "github-visibility-change-locks-repo"}
+{"query": "gosec reports 0 issues but there are findings", "expect": "gosec-exit-code-not-summary"}
+{"query": "declare: -A: invalid option", "expect": "macos-bash32-no-declare-a"}
+{"query": "S1002: should omit comparison to bool constant", "expect": "go-s1002-bool-compare"}
+{"query": "Repository has been locked 403", "expect": "github-visibility-change-locks-repo"}
+{"query": "my wrapped error comparison isn't working in Go", "expect": "go-errorlint-wrap", "xfail": true}
+{"query": "my required status check passed even though it was skipped", "expect": "skipped-required-check-counts-as-passed"}
+{"query": "sourdough bread fermentation schedule", "abstain": true}
+{"query": "best hiking trails in the Dolomites", "abstain": true}
+{"query": "how do I bake a chocolate cake", "abstain": true}
