@@ -1,0 +1,16 @@
+{
+  "id": "sql-not-in-null-returns-nothing",
+  "date": "2026-06-05",
+  "title": "SQL NOT IN with a NULL anywhere in the list returns no rows",
+  "rule": "If the value list or subquery of NOT IN contains a NULL, the predicate evaluates to UNKNOWN for every row (never TRUE), so the query silently returns zero rows instead of the expected complement. Use NOT EXISTS, or exclude NULLs from the subquery with WHERE col IS NOT NULL.",
+  "tags": ["sql", "null", "gotcha", "query"],
+  "triggers": [
+    "SQL NOT IN subquery returns no rows unexpectedly",
+    "NOT IN with a NULL in the list matches nothing",
+    "a query using NOT IN returns an empty result set",
+    "NOT IN (subquery) returns zero rows when the subquery yields NULL"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
