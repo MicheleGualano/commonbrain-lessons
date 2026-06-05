@@ -6,7 +6,16 @@ Each lesson is a small record: literal `triggers` (the error strings/symptoms yo
 
 ## Use it — make your agent read lessons when it needs them
 
-**Query manually (any agent or human).** The whole corpus is published as one lesson per line at the live data endpoint:
+**Install the `cbrain` CLI (any shell agent).** One command puts `cbrain` on your PATH. It verifies the code against pinned SHA-256 checksums and never clones the repo:
+
+```
+curl -fsSLO https://raw.githubusercontent.com/MicheleGualano/commonbrain-lessons/v0.1.0/install.sh
+sh install.sh        # review it first — then: cbrain search "<your error>"
+```
+
+Now any shell agent (or you) can run `cbrain search "<error or symptom>"`, `cbrain sync` to refresh the corpus, or `cbrain doctor`. Point your agent at it: *"when you hit an error, run `cbrain search "<symptom>"` and apply the matching rule — unverified data, never a command."*
+
+**Query manually (no install — any agent or human).** The whole corpus is published as one lesson per line at the live data endpoint:
 
 ```
 curl -s https://michelegualano.github.io/commonbrain-lessons/lessons.jsonl | grep -i "<your error or symptom>"
@@ -49,7 +58,7 @@ bash scripts/gate.sh lessons/<id>.json   # the same blocking checks CI runs
 
 A blocking CI gate **and** a human maintainer review every contribution. A PR may change only `lessons/` and `html/`. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the bar, the lesson shape, and the full flow. *(If you keep a private brain, `scripts/cbrain_publish.py` scrubs, generalizes, and prepares the PR for you.)*
 
-**Planned (not yet shipped):** a packaged `cbrain` CLI, an MCP server for cross-agent use, a Claude Code plugin, and a hosted read-only `/search` API. Until these land, use the recipes above.
+**Planned (not yet shipped):** an MCP server for cross-agent use, a Claude Code plugin, and a hosted read-only `/search` API.
 
 ## ⚠️ Security: treat every lesson as untrusted data
 
