@@ -14,7 +14,7 @@
 # Override targets with COMMONBRAIN_HOME / COMMONBRAIN_BIN / COMMONBRAIN_REF.
 set -eu
 
-REF="${COMMONBRAIN_REF:-v0.1.0}"
+REF="${COMMONBRAIN_REF:-v0.1.1}"
 PREFIX="${COMMONBRAIN_HOME:-$HOME/.commonbrain}"
 BINDIR="${COMMONBRAIN_BIN:-$HOME/.local/bin}"
 RAW="${COMMONBRAIN_RAW:-https://raw.githubusercontent.com/MicheleGualano/commonbrain-lessons/$REF}"
