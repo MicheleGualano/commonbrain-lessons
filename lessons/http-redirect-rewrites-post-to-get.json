@@ -1,0 +1,23 @@
+{
+  "id": "http-redirect-rewrites-post-to-get",
+  "date": "2026-06-05",
+  "title": "Following a 301/302 redirect can change POST to GET and drop the body",
+  "rule": "Following a 301 or 302 response to a POST may silently change the method to GET and discard the request body, and curl, browsers, and common HTTP clients do this by default (RFC 9110 permits it). To preserve method and body across a redirect use 307/308, or disable auto-follow and re-issue the POST to the new location deliberately.",
+  "tags": [
+    "http",
+    "rest",
+    "redirect",
+    "gotcha",
+    "api-client"
+  ],
+  "triggers": [
+    "a POST turns into a GET after a redirect",
+    "301 redirect dropped my request body",
+    "redirect changed the HTTP method to GET",
+    "POST body lost following a 302",
+    "client follows a redirect and loses POST data"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

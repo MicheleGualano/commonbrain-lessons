@@ -1,0 +1,23 @@
+{
+  "id": "string-length-counts-code-units",
+  "date": "2026-06-05",
+  "title": "String length counts encoding units, not visible characters",
+  "rule": "A string length often counts encoding units rather than user-visible characters: JS .length counts UTF-16 code units, so an emoji or a combining accent can be length 2 or more and a family emoji 8, while the byte length differs again. Do not use length for character counts, truncation, or column limits; iterate by code point or grapheme instead.",
+  "tags": [
+    "unicode",
+    "encoding",
+    "strings",
+    "javascript",
+    "gotcha"
+  ],
+  "triggers": [
+    "string length counts more than the visible characters",
+    "an emoji has length 2 in JavaScript",
+    "truncating a string by length splits a character",
+    "family emoji length is 8 not 1",
+    "length does not match the number of characters"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

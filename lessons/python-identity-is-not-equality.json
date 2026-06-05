@@ -1,0 +1,23 @@
+{
+  "id": "python-identity-is-not-equality",
+  "date": "2026-06-05",
+  "title": "`is` deceptively works on literals but fails for equal values built at runtime",
+  "rule": "Use == for value equality and reserve is for None, True, False, and sentinels. CPython caches small ints (-5..256) and interns literal strings, so is appears to work on literals and small values, yet returns False for equal values produced at runtime such as parsed ints or joined strings. Identity is not equality.",
+  "tags": [
+    "python",
+    "equality",
+    "interning",
+    "cpython",
+    "gotcha"
+  ],
+  "triggers": [
+    "comparing values with is returns False for equal numbers",
+    "two equal strings are not identical with is",
+    "is comparison works in the REPL but fails on parsed values",
+    "int built from a string is not is-equal to the same int",
+    "SyntaxWarning is with a literal did you mean =="
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

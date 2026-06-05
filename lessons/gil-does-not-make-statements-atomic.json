@@ -1,0 +1,24 @@
+{
+  "id": "gil-does-not-make-statements-atomic",
+  "date": "2026-06-05",
+  "title": "The CPython GIL serializes bytecodes, not whole statements, so += is not atomic",
+  "rule": "The CPython GIL guarantees one bytecode runs without interleaving, NOT that a whole statement is indivisible: the interpreter can switch threads between the load and the store of x += 1, counter = counter + 1, or any check-then-act, so they race across threads and lose updates. Guard shared mutable state with a Lock or a queue; never assume a Python statement is atomic because of the GIL.",
+  "tags": [
+    "python",
+    "cpython",
+    "gil",
+    "concurrency",
+    "threading",
+    "gotcha"
+  ],
+  "triggers": [
+    "a threaded counter loses increments under the GIL",
+    "x += 1 is not atomic across Python threads",
+    "race condition in Python threads despite the GIL",
+    "counter = counter + 1 interleaves between two threads",
+    "check-then-act race in multithreaded Python"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
