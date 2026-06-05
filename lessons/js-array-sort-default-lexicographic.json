@@ -1,0 +1,16 @@
+{
+  "id": "js-array-sort-default-lexicographic",
+  "date": "2026-06-05",
+  "title": "JavaScript Array.prototype.sort() sorts elements as strings by default",
+  "rule": "Array.prototype.sort() with no comparator converts each element to a string and sorts lexicographically, so [10, 2, 1].sort() yields [1, 10, 2], not [1, 2, 10]. Pass a numeric comparator: arr.sort((a, b) => a - b).",
+  "tags": ["javascript", "sorting", "gotcha", "arrays"],
+  "triggers": [
+    "JavaScript Array.sort returns numbers in the wrong order",
+    "[10, 2, 1].sort() gives [1, 10, 2]",
+    "Array.sort is comparing numbers as strings",
+    "Array.prototype.sort not sorting numerically"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

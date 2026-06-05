@@ -1,0 +1,16 @@
+{
+  "id": "python-mutable-default-argument",
+  "date": "2026-06-05",
+  "title": "Python evaluates a default argument once, so a mutable default is shared across calls",
+  "rule": "A function's default argument is evaluated a single time when the def runs, not per call, so a mutable default (list, dict, set) persists and accumulates state between separate calls. Use None as the sentinel and build the real default inside the body: def f(x, acc=None): acc = [] if acc is None else acc.",
+  "tags": ["python", "gotcha", "functions", "mutable-state"],
+  "triggers": [
+    "a Python function's default list or dict keeps values from previous calls",
+    "def f(x=[]) accumulates items across separate calls",
+    "mutable default argument is shared between invocations",
+    "Python optional list parameter is not empty on a fresh call"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

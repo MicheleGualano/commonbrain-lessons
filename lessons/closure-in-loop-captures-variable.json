@@ -1,0 +1,16 @@
+{
+  "id": "closure-in-loop-captures-variable",
+  "date": "2026-06-05",
+  "title": "Closures created in a loop capture the loop variable by reference, not its value",
+  "rule": "In Python (and JavaScript declared with var), a closure defined inside a loop captures the loop variable itself, not its value at the moment of creation, so after the loop every closure sees the variable's final value. Bind the current value explicitly: a default argument (lambda i=i: ...) in Python, or let/const per iteration in JavaScript.",
+  "tags": ["python", "javascript", "closures", "gotcha", "loops"],
+  "triggers": [
+    "all closures created in a loop return the same last value",
+    "a list of lambdas built in a loop all print the final index",
+    "callbacks registered in a for loop all use the last iteration's value",
+    "function defined inside a loop captures the wrong variable value"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
