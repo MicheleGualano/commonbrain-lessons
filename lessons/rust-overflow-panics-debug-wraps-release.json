@@ -1,0 +1,24 @@
+{
+  "id": "rust-overflow-panics-debug-wraps-release",
+  "date": "2026-06-05",
+  "title": "Rust integer overflow panics in debug but silently wraps in release",
+  "rule": "In Rust, plain +, -, * on integers are overflow-checked only when `overflow-checks` is on (default: dev=on, release=off). Debug/test builds panic (\"attempt to ... with overflow\"); release builds compile the check out and wrap two's-complement (255u8+1 -> 0, i32::MAX+1 -> i32::MIN). So a bug can pass debug tests yet go silently wrong in release, or pass release yet panic in CI debug. Never rely on the panic for correctness; use wrapping_/checked_/saturating_/overflowing_ explicitly, or set overflow-checks=true in the release profile.",
+  "tags": [
+    "rust",
+    "gotcha",
+    "integer-overflow",
+    "release-vs-debug",
+    "arithmetic"
+  ],
+  "triggers": [
+    "attempt to add with overflow",
+    "attempt to multiply with overflow",
+    "attempt to subtract with overflow",
+    "works in release but panics in debug",
+    "passes tests but wrong result in production",
+    "code panics in CI but not locally release build"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

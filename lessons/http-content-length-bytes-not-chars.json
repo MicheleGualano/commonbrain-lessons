@@ -1,0 +1,25 @@
+{
+  "id": "http-content-length-bytes-not-chars",
+  "date": "2026-06-05",
+  "title": "Content-Length must be the byte count, not the string length",
+  "rule": "When hand-building an HTTP request, set Content-Length to len(body.encode()) — the byte count of the encoded body — not the character/string length. Any multibyte UTF-8 (accents, emoji, CJK) makes bytes > chars, so a char-length Content-Length truncates the body server-side mid-character; on keep-alive connections the leftover bytes are parsed as the next request and desync the connection. Encode to bytes first, then take len().",
+  "tags": [
+    "http",
+    "content-length",
+    "encoding",
+    "utf-8",
+    "gotcha"
+  ],
+  "triggers": [
+    "truncated request body on server",
+    "JSON parse error only with non-ASCII",
+    "Content-Length mismatch",
+    "connection desync keep-alive",
+    "server hangs waiting for more body",
+    "incomplete read",
+    "unexpected end of JSON input"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

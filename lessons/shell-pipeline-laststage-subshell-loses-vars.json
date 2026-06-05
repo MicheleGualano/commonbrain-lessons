@@ -1,0 +1,23 @@
+{
+  "id": "shell-pipeline-laststage-subshell-loses-vars",
+  "date": "2026-06-05",
+  "title": "The last stage of a pipeline runs in a subshell, so its variable assignments vanish",
+  "rule": "In bash (no `lastpipe`), every pipeline stage runs in its own subshell, so variables assigned inside `cmd | while read ...; do count=$((count+1)); done` are discarded when the pipeline ends and the parent keeps the old value. Keep the loop in the current shell instead: feed it via process substitution `while ...; done < <(cmd)` or a here-string `while ...; done <<<\"$var\"`. (`shopt -s lastpipe` also works but only in bash 4.2+ with job control off, e.g. `set +m`.)",
+  "tags": [
+    "bash",
+    "shell",
+    "subshell",
+    "pipeline",
+    "gotcha"
+  ],
+  "triggers": [
+    "counter is 0 after while read loop",
+    "variable not updated after pipe to while",
+    "cmd | while read loses variable",
+    "array empty after building it in a piped loop",
+    "value reset outside while loop bash"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "except-exception-misses-baseexception",
+  "date": "2026-06-05",
+  "title": "`except Exception` does not catch KeyboardInterrupt, SystemExit, or GeneratorExit",
+  "rule": "KeyboardInterrupt, SystemExit, and GeneratorExit inherit from BaseException, not Exception, so `except Exception:` intentionally lets them propagate (Ctrl-C and sys.exit still work). The footgun is reaching for bare `except:` or `except BaseException:` \"to be thorough\" — that silently swallows Ctrl-C and exit signals, making retry loops and long tasks impossible to interrupt and breaking clean shutdown. Catch `Exception` for application errors; catch BaseException only if you re-raise (or use try/finally for cleanup).",
+  "tags": [
+    "python",
+    "gotcha",
+    "exceptions",
+    "signals",
+    "control-flow"
+  ],
+  "triggers": [
+    "Ctrl-C does not stop the program",
+    "KeyboardInterrupt not caught by except Exception",
+    "bare except swallows SystemExit",
+    "cannot interrupt retry loop",
+    "sys.exit() ignored inside try/except",
+    "program won't terminate on keyboard interrupt"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

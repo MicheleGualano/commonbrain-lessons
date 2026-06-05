@@ -1,0 +1,25 @@
+{
+  "id": "python-list-repeat-and-fromkeys-shared-reference",
+  "date": "2026-06-05",
+  "title": "`[[0]*n]*m` and `dict.fromkeys(keys, [])` share one inner object, not copies",
+  "rule": "Python's sequence-repeat `*` copies references, not values: `[[0]*3]*3` makes three rows that are the SAME list object, so `grid[0][0]=9` mutates every row; `dict.fromkeys(keys, [])` likewise stores one shared list under every key. The inner `[0]*3` is fine because ints are immutable — the trap is only the outer repeat of a mutable. Build independent containers per element: `[[0]*3 for _ in range(3)]` and `{k: [] for k in keys}`.",
+  "tags": [
+    "python",
+    "gotcha",
+    "mutable",
+    "aliasing",
+    "list",
+    "dict"
+  ],
+  "triggers": [
+    "modifying one row of a grid changes all rows",
+    "[[0]*n]*m all rows update together",
+    "dict.fromkeys with list shares same list",
+    "appending to one key appends to all keys",
+    "2d list initialization all elements change",
+    "shallow copy still mutates original nested list"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

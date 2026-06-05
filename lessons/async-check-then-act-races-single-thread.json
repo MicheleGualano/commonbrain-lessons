@@ -1,0 +1,24 @@
+{
+  "id": "async-check-then-act-races-single-thread",
+  "date": "2026-06-05",
+  "title": "A guard flag does not prevent re-entrancy across await in single-threaded async code",
+  "rule": "In cooperative single-threaded async runtimes (JS event loop, Python asyncio), control only leaves a function at a suspension point (`await`/`yield`), so a check-then-act guard that straddles the first await is still a race: every coroutine that runs up to the guard before any of them suspends passes it. Mutate the guard state — set the boolean, or store the in-flight Promise/Future for dedupe — SYNCHRONOUSLY before the first await, never after. There is no implicit critical section between awaits.",
+  "tags": [
+    "javascript",
+    "python",
+    "asyncio",
+    "concurrency",
+    "gotcha",
+    "race-condition"
+  ],
+  "triggers": [
+    "duplicate fetch fired even though I have an inFlight flag",
+    "debounce / once guard not working with async/await",
+    "two requests sent despite isLoading check",
+    "race condition single threaded node",
+    "concurrent calls both pass the if (busy) return check"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
