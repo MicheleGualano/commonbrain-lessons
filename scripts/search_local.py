@@ -20,11 +20,32 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _index_is_fresh(jsonl, sources):
+    """Whether the derived index may be trusted over the source lessons. On a
+    packaged install (no source files present) trust the shipped index. When
+    sources exist, the index is STALE — and must not be served — if it holds a
+    different record count than the source set, or if any source file is newer
+    than the index. This applies the corpus's own lesson
+    'search-prefers-stale-derived-index' to its own searcher."""
+    if not sources:
+        return True
+    jm = os.path.getmtime(jsonl)
+    if any(os.path.getmtime(s) > jm for s in sources):
+        return False
+    with open(jsonl, encoding='utf-8') as f:
+        n = sum(1 for line in f if line.strip())
+    return n == len(sources)
+
+
 def load():
     jsonl = os.path.join(ROOT, 'build', 'lessons.jsonl')
-    if os.path.isfile(jsonl):
+    sources = sorted(glob.glob(os.path.join(ROOT, 'lessons', '*.json')))
+    if os.path.isfile(jsonl) and _index_is_fresh(jsonl, sources):
         return [json.loads(l) for l in open(jsonl, encoding='utf-8') if l.strip()]
-    return [json.load(open(p, encoding='utf-8')) for p in sorted(glob.glob(os.path.join(ROOT, 'lessons', '*.json')))]
+    if os.path.isfile(jsonl) and sources:
+        print('search_local: build/lessons.jsonl is stale vs lessons/ — using source files '
+              '(run scripts/build_index.py to refresh the index)', file=sys.stderr)
+    return [json.load(open(p, encoding='utf-8')) for p in sources]
 
 
 def norm(s):

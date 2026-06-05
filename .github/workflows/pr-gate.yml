@@ -296,6 +296,19 @@ jobs:
           rm -rf base/build base/lessons
           cp -r pr/lessons base/lessons
           python3 base/scripts/eval_search.py base/tests/eval.jsonl
+      - name: Drift guard — a stale/short derived index must NOT be served (load() prefers source)
+        run: |
+          set -euo pipefail
+          cd base
+          mkdir -p build
+          # Plant a deliberately stale 1-record index; load() must ignore it and
+          # serve all source lessons (the freshness guard applying the corpus's
+          # own 'search-prefers-stale-derived-index' lesson to its own searcher).
+          printf '%s\n' '{"id":"stale-stub","date":"2020-01-01","title":"deliberately stale stub record","rule":"this stale record must be ignored by load()","tags":["x"],"triggers":["x"],"provenance":"promoted","license":"CC-BY-4.0"}' > build/lessons.jsonl
+          got=$(python3 -c "import sys; sys.path.insert(0,'scripts'); import search_local; print(len(search_local.load()))")
+          want=$(ls lessons/*.json | wc -l | tr -d ' ')
+          test "$got" -eq "$want" || { echo "::error::freshness guard failed — load() served $got records from a stale index, expected $want source lessons"; exit 1; }
+          echo "drift guard: load() ignored the stale index, served $got source lessons."
 
   # --- Single REQUIRED check: succeeds only if every gate above passed --------
   # MUST be fail-closed: with `if: always()` this job runs even when an upstream
