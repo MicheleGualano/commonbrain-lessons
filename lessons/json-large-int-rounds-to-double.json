@@ -1,0 +1,23 @@
+{
+  "id": "json-large-int-rounds-to-double",
+  "date": "2026-06-05",
+  "title": "JSON integers above 2^53 lose precision when parsed as float64 doubles",
+  "rule": "Many JSON parsers decode every number into an IEEE-754 double (notably JS JSON.parse, and Go encoding/json into interface{}), so an integer above 2^53-1 silently rounds: 9007199254740993 can read back as 9007199254740992. Carry large or 64-bit ids as JSON strings, or use a parser with big-integer support.",
+  "tags": [
+    "json",
+    "floating-point",
+    "integers",
+    "serialization",
+    "gotcha"
+  ],
+  "triggers": [
+    "a large integer id changes value after a JSON round-trip",
+    "JSON.parse loses precision on big integers",
+    "64-bit id read back wrong from JSON",
+    "integer above 2^53 is rounded when parsing JSON",
+    "snowflake id corrupted by JSON encoding"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "http-retry-can-double-non-idempotent",
+  "date": "2026-06-05",
+  "title": "Blindly retrying a non-idempotent request on timeout can run it twice",
+  "rule": "A client timeout or 5xx does not mean the server skipped the work: the request may have committed and only the response was lost, so auto-retrying a non-idempotent request (a POST that charges, emails, or increments) can execute it twice. Make the operation idempotent with an idempotency key or dedupe, and reserve blind auto-retry for idempotent methods.",
+  "tags": [
+    "http",
+    "rest",
+    "retry",
+    "idempotency",
+    "reliability",
+    "gotcha"
+  ],
+  "triggers": [
+    "retrying a POST on timeout charged the customer twice",
+    "duplicate side effect after a request timeout retry",
+    "is it safe to retry a POST on 5xx",
+    "timeout does not mean the server skipped the request",
+    "non-idempotent request executed twice after a retry"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
