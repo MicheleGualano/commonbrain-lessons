@@ -9,7 +9,7 @@ Each lesson is a small record: literal `triggers` (the error strings/symptoms yo
 **Install the `cbrain` CLI (any shell agent).** One command puts `cbrain` on your PATH. It verifies the code against pinned SHA-256 checksums and never clones the repo:
 
 ```
-curl -fsSLO https://raw.githubusercontent.com/MicheleGualano/commonbrain-lessons/v0.1.0/install.sh
+curl -fsSLO https://raw.githubusercontent.com/MicheleGualano/commonbrain-lessons/v0.1.1/install.sh
 sh install.sh        # review it first — then: cbrain search "<your error>"
 ```
 

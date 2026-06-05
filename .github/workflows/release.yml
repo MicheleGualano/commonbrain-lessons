@@ -1,0 +1,44 @@
+# release — on a v* tag, GUARD that install.sh's pinned checksums match the tagged
+# code, then publish SHA256SUMS for independent verification.
+#
+# WHY: install.sh pins the SHA-256 of bin/cbrain and scripts/search_local.py to a
+# release tag. Changing either file without updating those constants (and cutting
+# a matching tag) would ship an installer that REJECTS the legitimate code with a
+# checksum mismatch. This workflow turns that silent drift into a LOUD, blocking
+# release failure, and attaches a SHA256SUMS asset users can verify against.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write   # create/update the release and upload SHA256SUMS
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: install.sh pins must match the tagged code
+        run: |
+          set -euo pipefail
+          ref="${GITHUB_REF_NAME}"
+          search_sha="$(sha256sum scripts/search_local.py | awk '{print $1}')"
+          cbrain_sha="$(sha256sum bin/cbrain | awk '{print $1}')"
+          grep -q "SEARCH_SHA=\"$search_sha\"" install.sh || { echo "::error::install.sh SEARCH_SHA != scripts/search_local.py ($search_sha) — update install.sh before tagging"; exit 1; }
+          grep -q "CBRAIN_SHA=\"$cbrain_sha\"" install.sh || { echo "::error::install.sh CBRAIN_SHA != bin/cbrain ($cbrain_sha) — update install.sh before tagging"; exit 1; }
+          grep -q "COMMONBRAIN_REF:-$ref}" install.sh || { echo "::error::install.sh default REF is not $ref — bump it before tagging"; exit 1; }
+          echo "OK: install.sh pins match $ref (search=$search_sha cbrain=$cbrain_sha)"
+      - name: Generate SHA256SUMS
+        run: sha256sum bin/cbrain scripts/search_local.py install.sh > SHA256SUMS
+      - name: Publish release + SHA256SUMS
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ref="${GITHUB_REF_NAME}"
+          gh release view "$ref" >/dev/null 2>&1 \
+            || gh release create "$ref" --title "commonbrain $ref" \
+                 --notes "Automated release: install.sh checksums verified against the tagged code. SHA256SUMS attached for independent verification."
+          gh release upload "$ref" SHA256SUMS --clobber
