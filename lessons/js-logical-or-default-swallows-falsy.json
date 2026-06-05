@@ -1,0 +1,24 @@
+{
+  "id": "js-logical-or-default-swallows-falsy",
+  "date": "2026-06-05",
+  "title": "Using || for default values discards valid 0, empty string, and false",
+  "rule": "x || fallback evaluates the fallback for every falsy x, which includes 0, '', false, NaN and 0n — not just null/undefined. So opts.port || 8080 turns an explicit port 0 into 8080, count || 10 ignores a legitimate 0, and name || 'guest' drops an intentional empty string. When the only values you want to replace are 'missing' (null/undefined), use the nullish coalescing operator ?? instead, which short-circuits only on null and undefined and preserves all other falsy-but-valid values.",
+  "tags": [
+    "javascript",
+    "typescript",
+    "gotcha",
+    "coercion",
+    "defaults"
+  ],
+  "triggers": [
+    "default value applied even though I passed 0",
+    "empty string replaced by default unexpectedly",
+    "false flag overridden by fallback",
+    "port 0 becomes 8080",
+    "config value of 0 ignored",
+    "|| vs ?? default value"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

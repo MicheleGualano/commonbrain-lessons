@@ -1,0 +1,23 @@
+{
+  "id": "sql-left-join-count-star-overcounts-zero",
+  "date": "2026-06-05",
+  "title": "COUNT(*) in a LEFT JOIN reports 1 for rows that matched nothing",
+  "rule": "In a LEFT JOIN, unmatched left rows are padded with an all-NULL right row, and COUNT(*) still counts that phantom — so a parent with zero children reports 1, not 0. Use COUNT(<right_table_nonnull_column>) (e.g. COUNT(child.id)), which ignores the NULL filler and returns 0. Beware the same inflation when COUNT(*) feeds an AVG/ratio denominator.",
+  "tags": [
+    "sql",
+    "gotcha",
+    "join",
+    "null",
+    "aggregate"
+  ],
+  "triggers": [
+    "LEFT JOIN count returns 1 instead of 0",
+    "customers with no orders show count 1",
+    "COUNT(*) wrong after LEFT JOIN",
+    "group with zero matches counted as one",
+    "COUNT(*) vs COUNT(column) different results"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "parseint-parsefloat-stop-at-first-bad-char",
+  "date": "2026-06-05",
+  "title": "parseInt/parseFloat return a number from garbage input instead of failing",
+  "rule": "JS parseInt/parseFloat parse the longest valid numeric prefix and silently return it instead of erroring, so garbage produces a plausible-but-wrong number that passes validation: parseInt('12px')===12, parseInt('0x10')===16 (radix auto-detected), parseFloat('1,234.5')===1, parseFloat('1.234,5')===1.234 (a EU decimal comma terminates the scan). For validation use Number(str) (Number('12px') is NaN) plus an explicit isNaN/format check, and always pass an explicit radix to parseInt.",
+  "tags": [
+    "javascript",
+    "parsing",
+    "gotcha",
+    "numbers",
+    "locale",
+    "validation"
+  ],
+  "triggers": [
+    "parseInt returns wrong value for string with units",
+    "parseFloat ignores text after number",
+    "parseInt('12px') returns 12",
+    "thousands separator parsed as end of number",
+    "European decimal comma gives wrong parseFloat result",
+    "parseInt missing radix argument"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

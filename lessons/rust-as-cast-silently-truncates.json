@@ -1,0 +1,24 @@
+{
+  "id": "rust-as-cast-silently-truncates",
+  "date": "2026-06-05",
+  "title": "Rust `as` casts never panic: ints truncate, float-to-int saturates",
+  "rule": "Unlike arithmetic, the `as` operator never panics in any build profile. Integer narrowing silently truncates the low bits (300 as u8 == 44, -1 as u8 == 255), and since Rust 1.45 float-to-int `as` saturates instead of being UB (1e9 as u8 == 255, -5.0 as u8 == 0, NaN as u8 == 0). This is treacherous next to the debug-overflow panic: the same out-of-range value that would panic via + quietly produces a wrong number via `as`. For range-checked conversion use TryFrom/TryInto (u8::try_from(x)) and handle the Err, rather than reaching for `as`.",
+  "tags": [
+    "rust",
+    "gotcha",
+    "casting",
+    "conversion",
+    "numeric"
+  ],
+  "triggers": [
+    "as u8 gives wrong value",
+    "cast produces unexpected number instead of error",
+    "float as integer saturates to 255",
+    "NaN as integer becomes 0",
+    "no panic on out of range cast in Rust",
+    "TryFrom vs as for integer conversion"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

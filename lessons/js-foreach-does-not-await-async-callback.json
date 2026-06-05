@@ -1,0 +1,24 @@
+{
+  "id": "js-foreach-does-not-await-async-callback",
+  "date": "2026-06-05",
+  "title": "Array.forEach/map ignore async callbacks: code after the loop runs before the work finishes",
+  "rule": "Array.prototype.forEach/map/filter are not async-aware: they call an async callback, receive a Promise, and either discard it (forEach) or collect it unawaited (map/filter yield Promise[] and filter even keeps every element since a Promise is truthy). The method returns synchronously, so code after the loop — and the enclosing function's return — runs before the awaited work finishes, and rejections go unhandled. For sequential async work use for...of with await; for concurrent use await Promise.all(items.map(asyncFn)). Never rely on await inside .forEach.",
+  "tags": [
+    "javascript",
+    "typescript",
+    "async",
+    "gotcha",
+    "promises"
+  ],
+  "triggers": [
+    "results are empty right after a forEach with async callback",
+    "code after forEach runs before await finishes",
+    "array is [] but populated later in async loop",
+    "await inside forEach has no effect",
+    "UnhandledPromiseRejection from forEach callback",
+    "map returns array of promises instead of values"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "zsh-unquoted-no-word-splitting",
+  "date": "2026-06-05",
+  "title": "zsh does not word-split unquoted parameter expansions the way bash does",
+  "rule": "In zsh, an unquoted scalar expansion like $VAR or `for x in $VAR` is NOT split on whitespace into separate words the way bash and POSIX sh do, so a space-separated string reaches a command as a single argument. Force splitting with ${=VAR}, use a real array (arr=(a b); cmd \"${arr[@]}\"), or set the SH_WORD_SPLIT option — do not rely on a bash script's implicit splitting under zsh.",
+  "tags": ["zsh", "shell", "gotcha", "word-splitting", "scripting"],
+  "triggers": [
+    "a space-separated variable is passed to a command as one argument in zsh",
+    "for x in $VAR runs once with the whole string instead of per word in zsh",
+    "File name too long when looping over a variable holding several paths in zsh",
+    "a shell script works under bash but breaks under zsh",
+    "unquoted variable is not splitting on spaces in zsh"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

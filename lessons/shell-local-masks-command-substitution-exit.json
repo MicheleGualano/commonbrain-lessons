@@ -1,0 +1,24 @@
+{
+  "id": "shell-local-masks-command-substitution-exit",
+  "date": "2026-06-05",
+  "title": "local/declare/export with a command substitution swallows its failure under set -e",
+  "rule": "Under set -e, `v=$(cmd)` aborts when cmd fails, but `local v=$(cmd)`, `declare v=$(cmd)`, `export v=$(cmd)`, and `readonly v=$(cmd)` do NOT — the line's exit status is the builtin's (almost always 0), which swallows the substitution's failure (also breaking any following `$?` check). This is ShellCheck SC2155. Fix: declare and assign on separate lines (`local v; v=$(cmd)`) so errexit and `$?` see cmd's real status.",
+  "tags": [
+    "bash",
+    "shell",
+    "set-e",
+    "gotcha",
+    "error-handling"
+  ],
+  "triggers": [
+    "set -e not exiting on failed command substitution",
+    "local var=$(cmd) ignores error",
+    "function continues after failed command in local assignment",
+    "declare masks exit status",
+    "$? is 0 after local assignment that should have failed",
+    "errexit not firing inside function"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

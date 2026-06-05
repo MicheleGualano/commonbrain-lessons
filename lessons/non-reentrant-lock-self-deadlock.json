@@ -1,0 +1,25 @@
+{
+  "id": "non-reentrant-lock-self-deadlock",
+  "date": "2026-06-05",
+  "title": "Re-acquiring a non-reentrant lock from the same thread deadlocks against yourself",
+  "rule": "A plain mutex (Python threading.Lock, std::mutex, pthread default mutex) is non-reentrant: if a thread that already holds it acquires it again, it self-deadlocks (Python/pthread block forever; re-locking std::mutex is undefined behavior, typically a deadlock). This commonly bites when a locked public method calls another locked public method, or in recursion. Either take the lock once at the boundary and have inner helpers assume it's held, or use a reentrant lock (RLock, std::recursive_mutex) deliberately.",
+  "tags": [
+    "concurrency",
+    "threading",
+    "deadlock",
+    "locks",
+    "python",
+    "cpp",
+    "gotcha"
+  ],
+  "triggers": [
+    "program hangs acquiring a mutex it already holds",
+    "self deadlock recursive method lock",
+    "threading.Lock blocks forever same thread",
+    "std::mutex lock twice undefined behavior deadlock",
+    "public method calls public method both take the lock and hang"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

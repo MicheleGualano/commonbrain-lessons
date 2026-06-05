@@ -1,0 +1,23 @@
+{
+  "id": "sql-integer-division-truncates-in-aggregates",
+  "date": "2026-06-05",
+  "title": "Integer / integer truncates to integer, silently corrupting hand-rolled averages and ratios",
+  "rule": "In SQL, integer / integer performs integer division (truncating toward zero), so SUM(x)/COUNT(x) or count_a/count_b drops the fraction before any ROUND can help. Force float/decimal division by casting one operand (x*1.0, CAST(x AS REAL), or ::numeric); for a plain mean, just use AVG(), which already returns a real.",
+  "tags": [
+    "sql",
+    "gotcha",
+    "arithmetic",
+    "integer-division",
+    "aggregate"
+  ],
+  "triggers": [
+    "SUM divided by COUNT returns integer",
+    "average is 1 instead of 1.67",
+    "ratio always rounds down to whole number",
+    "5/2 returns 2 in SQL",
+    "percentage calculation always zero"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}

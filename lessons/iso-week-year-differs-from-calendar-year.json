@@ -1,0 +1,25 @@
+{
+  "id": "iso-week-year-differs-from-calendar-year",
+  "date": "2026-06-05",
+  "title": "ISO week-year (%G) is not the calendar year (%Y) at year boundaries",
+  "rule": "ISO-8601 week numbers belong to a WEEK-year that can differ from the calendar year at Jan/Dec boundaries (late-Dec can be week 1 of next year; early-Jan can be week 52/53 of the previous year). Never pair the calendar year with an ISO week number — strftime %Y%V yields wrong labels like 2021-W53; use the matching week-year token (%G with %V, or ISO week-year APIs such as isocalendar()/IsoWeekYear).",
+  "tags": [
+    "dates",
+    "iso-8601",
+    "week-number",
+    "formatting",
+    "strftime",
+    "gotcha"
+  ],
+  "triggers": [
+    "ISO week number wrong at year boundary",
+    "week 53 shows wrong year",
+    "%Y %V gives invalid week label",
+    "December 31 reported as week 1 of next year",
+    "January 1 reported as week 52 or 53",
+    "%G vs %Y mismatch"
+  ],
+  "provenance": "promoted",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
