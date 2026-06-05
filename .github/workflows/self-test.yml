@@ -1,0 +1,33 @@
+# self-test — run the repo's OWN regression suite (tests/run.sh) on every push to
+# main and on every PR.
+#
+# WHY this exists alongside pr-gate: pr-gate validates a PR's *content* (the
+# lessons under review). It does NOT prove the *checkers themselves* still work,
+# and maintainer changes to scripts/, schema/, or .github/ are admin-merged and
+# BYPASS pr-gate entirely. This suite is the safety net for exactly that: it
+# re-proves that every security checker still BLOCKS its attack fixture and PASSES
+# clean ones, and that retrieval recall + abstention hold — so a maintainer change
+# that quietly weakens a checker or regresses search turns this job red on main.
+#
+# READ-ONLY: no secrets, no write permissions.
+name: self-test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  self-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python3 -m pip install --upgrade jsonschema
+      - name: Regression suite — security checkers block attacks + retrieval eval holds
+        run: bash tests/run.sh
