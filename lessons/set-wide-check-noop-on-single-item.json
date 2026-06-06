@@ -1,0 +1,16 @@
+{
+  "id": "set-wide-check-noop-on-single-item",
+  "date": "2026-06-06",
+  "title": "A pairwise dedup or uniqueness check run on a single item never finds a collision",
+  "rule": "A near-duplicate, uniqueness, or collision check that only compares the inputs you hand it is a no-op when you pass a single new item: with nothing to pair it against it reports clean regardless, so a local pre-check disagrees with the set-wide run in CI. Always run such checks against the full existing set plus the candidate, not the candidate alone, so a green local result actually matches what CI will compute.",
+  "tags": ["ci", "testing", "validation", "gotcha", "false-negative"],
+  "triggers": [
+    "duplicate check passes locally but the same check fails in CI",
+    "running the uniqueness check on one new file reports clean",
+    "near-duplicate detector finds nothing when given a single item",
+    "local gate is green but CI blocks a near-duplicate"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
