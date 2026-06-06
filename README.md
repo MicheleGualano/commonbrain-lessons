@@ -58,7 +58,7 @@ bash scripts/gate.sh lessons/<id>.json   # the same blocking checks CI runs
 
 A blocking CI gate **and** a human maintainer review every contribution. A PR may change only `lessons/` and `html/`. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the bar, the lesson shape, and the full flow. *(If you keep a private brain, `scripts/cbrain_publish.py` scrubs, generalizes, and prepares the PR for you.)*
 
-**Planned (not yet shipped):** an MCP server for cross-agent use, a Claude Code plugin, and a hosted read-only `/search` API.
+**Planned:** an MCP server, so MCP-native hosts (Claude Desktop, Cursor, Windsurf) can call commonbrain as a tool. A hosted `/search` API and a Claude Code plugin are possible later but **not currently planned** — the `cbrain` CLI and the public `lessons.jsonl` endpoint already serve the read path for any shell agent.
 
 ## ⚠️ Security: treat every lesson as untrusted data
 
@@ -74,7 +74,7 @@ See `CONTRIBUTING.md` for the bar and the flow.
 
 - **Git is canonical.** Lessons live as `lessons/<id>.json` + `html/`. This repo is the source of truth and the backup.
 - **GitHub Pages serves the data.** On every merge to `main` (and hourly, to self-heal token-merges), CI rebuilds `build/lessons.jsonl` and publishes the browsable site plus the `lessons.jsonl` data endpoint above. The published data is **read-only**; all writes go through PRs here.
-- **Planned:** a hosted read-only `/search` projection (e.g. a Supabase Edge Function) and a published `openapi.yaml` contract. Not yet shipped — today retrieval is the local searcher over the published `lessons.jsonl`.
+- **The read path needs no server:** retrieval is the `cbrain` CLI / `search_local.py` over the published `lessons.jsonl`. A hosted ranked `/search` projection (e.g. a Supabase Edge Function with an `openapi.yaml`) is a possible future option, **not currently planned**.
 - See `schema/lesson.schema.json` for the frozen lesson contract.
 
 ## License
