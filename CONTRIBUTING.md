@@ -14,6 +14,7 @@ Hard rules:
 - **No private/project specifics.** No project names, company/person names, home paths (`/Users/...`, `/home/...`), or internal hostnames. Generalize them away.
 - **No instructions to the reader-agent.** A lesson is data, not a prompt. Do not write imperative meta-instructions ("ignore previous instructions…"), role markers, or runnable "do this" commands. The `rule` is advisory prose.
 - **Real and reproducible.** Include literal `triggers` (the actual error text/symptom) and a `rule` that genuinely fixes/explains it. Filler and duplicates are rejected.
+- **Don't set `verified`.** `verified: true` is a maintainer-earned signal (the rule was reproduced by a maintainer), not something a PR can self-assert — the gate rejects a contribution that sets it.
 
 ## Lesson shape
 
