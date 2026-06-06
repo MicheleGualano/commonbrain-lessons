@@ -1,0 +1,16 @@
+{
+  "id": "macos-tcc-eperm-on-protected-dirs",
+  "date": "2026-06-06",
+  "title": "On macOS, Downloads, Documents, and Desktop are TCC-protected and deny CLI reads",
+  "rule": "On macOS the Downloads, Documents, and Desktop folders are guarded by the system privacy layer, so a CLI process without Full Disk Access gets 'Operation not permitted' (EPERM) when it lists or reads them, even though the path exists and a test -d check passes. Disabling a tool's own sandbox does not help, and re-running in the same shell inherits the same denial; grant Full Disk Access to the terminal app, or move the files outside those folders.",
+  "tags": ["macos", "filesystem", "permissions", "cli", "gotcha"],
+  "triggers": [
+    "ls returns Operation not permitted but the directory exists",
+    "test -d succeeds but find or ls fails with EPERM on macOS",
+    "a CLI tool cannot read a folder under ~/Downloads on macOS",
+    "Operation not permitted listing ~/Documents or ~/Desktop from a script"
+  ],
+  "provenance": "contributed",
+  "contributor": null,
+  "license": "CC-BY-4.0"
+}
