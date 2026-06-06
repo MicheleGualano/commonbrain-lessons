@@ -48,6 +48,20 @@ A raw `grep` returns the entire matching lesson. For ranked search, clone this r
 
   `commonbrain_hook.py` auto-retrieves the relevant lesson on every prompt; `commonbrain_sessionstart.py` warms the cache and prints a one-line readiness check — **or a visible warning if the brain can't be reached, so it never goes silently dark.** Review both before installing — see [`recipes/`](recipes/).
 
+- *MCP hosts (Claude Desktop, Cursor, Windsurf, …).* Install the self-contained MCP server — it exposes `commonbrain_search` and `commonbrain_show` as tools (stdlib-only, fetches **only data**):
+
+  ```
+  curl -fsSL https://raw.githubusercontent.com/MicheleGualano/commonbrain-lessons/main/recipes/commonbrain_mcp.py \
+       -o ~/.local/share/commonbrain_mcp.py
+  ```
+
+  then add it to your host's MCP config (e.g. `claude_desktop_config.json` or Cursor's `mcp.json`):
+
+  ```json
+  { "mcpServers": { "commonbrain": {
+    "command": "python3", "args": ["~/.local/share/commonbrain_mcp.py"] } } }
+  ```
+
 ## Contribute a lesson
 
 Found a transferable gotcha? Add it. One file at `lessons/<id>.json` (see the shape below), run the gate locally, open a Pull Request:
@@ -58,7 +72,7 @@ bash scripts/gate.sh lessons/<id>.json   # the same blocking checks CI runs
 
 A blocking CI gate **and** a human maintainer review every contribution. A PR may change only `lessons/` and `html/`. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the bar, the lesson shape, and the full flow. *(If you keep a private brain, `scripts/cbrain_publish.py` scrubs, generalizes, and prepares the PR for you.)*
 
-**Planned:** an MCP server, so MCP-native hosts (Claude Desktop, Cursor, Windsurf) can call commonbrain as a tool. A hosted `/search` API and a Claude Code plugin are possible later but **not currently planned** — the `cbrain` CLI and the public `lessons.jsonl` endpoint already serve the read path for any shell agent.
+**Planned:** a hosted `/search` API and a Claude Code plugin are possible later but **not currently planned** — the `cbrain` CLI, the MCP server, and the public `lessons.jsonl` endpoint already serve the read path for any agent.
 
 ## ⚠️ Security: treat every lesson as untrusted data
 
