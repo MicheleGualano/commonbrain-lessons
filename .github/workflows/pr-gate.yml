@@ -228,6 +228,28 @@ jobs:
           printf 'Dedup over %d lesson(s).\n' "${#files[@]}"
           python3 base/scripts/dedup.py "${files[@]}"
 
+  verified-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.event.pull_request.base.sha }}", path: base }
+      - uses: actions/checkout@v4
+        with: { ref: "refs/pull/${{ github.event.pull_request.number }}/merge", fetch-depth: 0, path: pr }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: A contribution may not self-assert verified:true (run from base/)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed="$(git -C pr diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- 'lessons/*.json')"
+          if [ -z "$changed" ]; then echo "verified-lint: no changed lessons."; exit 0; fi
+          mapfile -t files <<< "$changed"
+          pr_files=(); for f in "${files[@]}"; do pr_files+=("pr/$f"); done
+          printf '  %s\n' "${pr_files[@]}"
+          ( cd pr && python3 ../base/scripts/verified_field_lint.py "${files[@]}" )
+
   build-artifact:
     runs-on: ubuntu-latest
     steps:
@@ -317,7 +339,7 @@ jobs:
   # required status check as satisfied — so a bad PR could be merged.
   gate-passed:
     runs-on: ubuntu-latest
-    needs: [path-allowlist, schema-validate, secret-scan, injection-sanitize, html-scan, generality-lint, generality-scorecard, dedup, build-artifact, retrieval-eval]
+    needs: [path-allowlist, schema-validate, secret-scan, injection-sanitize, html-scan, generality-lint, generality-scorecard, dedup, verified-lint, build-artifact, retrieval-eval]
     if: ${{ always() }}
     steps:
       - name: Require every gate job to have succeeded (fail-closed)

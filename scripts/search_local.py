@@ -129,7 +129,9 @@ def search(query, lessons=None, tag=None, limit=5):
             continue
         sc, bt = score(query, l)
         scored.append((sc, l, bt))
-    scored.sort(key=lambda r: r[0], reverse=True)
+    # Sort by score; break ties in favor of maintainer-verified lessons (a free,
+    # defensible trust signal — score is unchanged, so recall/abstention are too).
+    scored.sort(key=lambda r: (r[0], 1 if r[1].get('verified') is True else 0), reverse=True)
     return _select(scored, limit)
 
 

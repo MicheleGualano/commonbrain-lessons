@@ -1,0 +1,12 @@
+{
+  "id": "verified-asserted-sample",
+  "date": "2026-06-06",
+  "title": "A sample lesson that wrongly self-asserts verified true",
+  "rule": "This fixture exists only to prove the verified-lint gate blocks a contribution that sets verified:true on its own.",
+  "tags": ["test", "fixture"],
+  "triggers": ["a contribution sets verified true and must be blocked by the gate"],
+  "provenance": "contributed",
+  "contributor": "someone",
+  "license": "CC-BY-4.0",
+  "verified": true
+}
